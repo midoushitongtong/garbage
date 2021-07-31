@@ -149,7 +149,7 @@ class Home extends StatelessWidget {
   //   );
   // }
 
-  List<Widget> _renderList() {
+  List<Widget> _buildList() {
     List dataList = [
       {'title': '文章标题1', 'content': '文章内容1'},
       {'title': '文章标题2', 'content': '文章内容2'},
@@ -169,13 +169,13 @@ class Home extends StatelessWidget {
   // // 渲染动态列表
   // @override
   // Widget build(BuildContext context) {
-  //   return ListView(children: this._renderList());
+  //   return ListView(children: this._buildList());
   // }
 
   // 使用 list view builder 来渲染列表
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = this._renderList();
+    List<Widget> widgetList = this._buildList();
 
     return ListView.builder(
       itemCount: widgetList.length,

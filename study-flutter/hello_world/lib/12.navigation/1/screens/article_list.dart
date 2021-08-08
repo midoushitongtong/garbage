@@ -13,9 +13,7 @@ class _ArticleListState extends State<ArticleList> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Article List',
-          ),
+          title: Text('Article List'),
         ),
         body: ListView(
           children: <Widget>[

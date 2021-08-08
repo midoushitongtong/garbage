@@ -20,9 +20,7 @@ class _BottomTabState extends State<BottomTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Home Page',
-        ),
+        title: Text('Home Page'),
       ),
       body: _pageList[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

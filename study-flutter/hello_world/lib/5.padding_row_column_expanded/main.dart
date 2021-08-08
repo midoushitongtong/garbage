@@ -5,12 +5,11 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Home Page',
-            ),
-          ),
-          body: Home()),
+        appBar: AppBar(
+          title: Text('Home Page'),
+        ),
+        body: Home(),
+      ),
     );
   }
 }

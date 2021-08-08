@@ -13,9 +13,7 @@ class _SignInState extends State<SignIn> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Sign In',
-          ),
+          title: Text('Sign In'),
         ),
         body: Container(
           child: ElevatedButton(

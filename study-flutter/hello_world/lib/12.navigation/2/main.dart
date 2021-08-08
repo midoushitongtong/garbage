@@ -49,9 +49,7 @@ class _AppState extends State<App> {
       },
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Home Page',
-          ),
+          title: Text('Home Page'),
         ),
         body: _pageList[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(

@@ -19,9 +19,7 @@ class _ArticleShowState extends State<ArticleShow> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-            title,
-          ),
+          title: Text(title),
         ),
         body: Text(
           '文章详情',

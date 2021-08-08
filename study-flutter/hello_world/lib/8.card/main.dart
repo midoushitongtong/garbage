@@ -6,9 +6,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Home Page',
-          ),
+          title: Text('Home Page'),
         ),
         body: Home(),
       ),

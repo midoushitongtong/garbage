@@ -13,9 +13,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Sign Up Step 2',
-          ),
+          title: Text('Sign Up Step 2'),
         ),
         body: Container(
           child: ElevatedButton(

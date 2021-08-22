@@ -10,8 +10,8 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   final routes = {
-    "/": (context) => BottomTab(),
-    "/custom_app_bar": (context) => CustomAppBar(),
+    '/': (context) => BottomTab(),
+    '/custom_app_bar': (context) => CustomAppBar(),
   };
 
   @override
@@ -19,7 +19,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // 隐藏右上角 debug
       routes: routes,
-      initialRoute: "/",
+      initialRoute: '/',
     );
   }
 }

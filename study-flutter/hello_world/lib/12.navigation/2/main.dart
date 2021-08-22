@@ -19,8 +19,8 @@ class _AppState extends State<App> {
   List _pageList = [Home(), Category(), Search(), Setting()];
 
   final routes = {
-    "/article_list": (context) => ArticleList(),
-    "/article_show": (context, {arguments}) => ArticleShow(arguments: arguments)
+    '/article_list': (context) => ArticleList(),
+    '/article_show': (context, {arguments}) => ArticleShow(arguments: arguments)
   };
 
   @override

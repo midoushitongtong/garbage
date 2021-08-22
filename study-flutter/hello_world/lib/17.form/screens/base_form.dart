@@ -15,12 +15,12 @@ class _BaseFormState extends State<BaseForm> {
   int _sex = 1;
 
   List _hobbies = [
-    {"checked": false, "text": "吃饭"},
-    {"checked": false, "text": "睡觉"},
-    {"checked": false, "text": "吃饭2"},
-    {"checked": false, "text": "睡觉2"},
-    {"checked": false, "text": "吃饭3"},
-    {"checked": false, "text": "睡觉3"},
+    {'checked': false, 'text': '吃饭'},
+    {'checked': false, 'text': '睡觉'},
+    {'checked': false, 'text': '吃饭2'},
+    {'checked': false, 'text': '睡觉2'},
+    {'checked': false, 'text': '吃饭3'},
+    {'checked': false, 'text': '睡觉3'},
   ];
 
   @override

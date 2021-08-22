@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
                 context,
                 '/article_show',
                 arguments: {
-                  "title": 'hello',
+                  'title': 'hello',
                 },
               );
             },

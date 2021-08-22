@@ -15,19 +15,19 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   final routes = {
-    "/": (context) => BottomTab(),
-    "/article_list": (context) => ArticleList(),
-    "/article_show": (context) => ArticleShow(),
-    "/sign_in": (context) => SignIn(),
-    "/sign_up_step_1": (context) => SignUpStep1(),
-    "/sign_up_step_2": (context) => SignUpStep2(),
+    '/': (context) => BottomTab(),
+    '/article_list': (context) => ArticleList(),
+    '/article_show': (context) => ArticleShow(),
+    '/sign_in': (context) => SignIn(),
+    '/sign_up_step_1': (context) => SignUpStep1(),
+    '/sign_up_step_2': (context) => SignUpStep2(),
   };
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: this.routes,
-      initialRoute: "/",
+      initialRoute: '/',
     );
   }
 }

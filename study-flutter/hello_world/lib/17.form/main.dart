@@ -14,12 +14,12 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   final routes = {
-    "/": (context) => BottomTab(),
-    "/base_text": (context) => BaseInput(),
-    "/base_checkbox": (context) => BaseCheckbox(),
-    "/base_radio": (context) => BaseRadio(),
-    "/base_switch": (context) => BaseSwitch(),
-    "/base_form": (context) => BaseForm(),
+    '/': (context) => BottomTab(),
+    '/base_text': (context) => BaseInput(),
+    '/base_checkbox': (context) => BaseCheckbox(),
+    '/base_radio': (context) => BaseRadio(),
+    '/base_switch': (context) => BaseSwitch(),
+    '/base_form': (context) => BaseForm(),
   };
 
   @override
@@ -27,7 +27,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // 隐藏右上角 debug
       routes: routes,
-      initialRoute: "/",
+      initialRoute: '/',
     );
   }
 }

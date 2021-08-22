@@ -11,9 +11,9 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   final routes = {
-    "/": (context) => BottomTab(),
-    "/base_button": (context) => BaseButton(),
-    "/base_floating_action_button": (context) => BaseFloatingActionButton(),
+    '/': (context) => BottomTab(),
+    '/base_button': (context) => BaseButton(),
+    '/base_floating_action_button': (context) => BaseFloatingActionButton(),
   };
 
   @override
@@ -21,7 +21,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // 隐藏右上角 debug
       routes: routes,
-      initialRoute: "/",
+      initialRoute: '/',
     );
   }
 }

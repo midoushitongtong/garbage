@@ -55,7 +55,7 @@ const downloadGitRepo = async (repo, tag) => {
 module.exports = async (projectName) => {
   if (!projectName) {
     console.log('Please provide project name');
-    console.log('e.g. mdstt create hello');
+    console.log('e.g. mini-vue-cli create hello');
     return;
   }
   // 1. 获取所有项目模板

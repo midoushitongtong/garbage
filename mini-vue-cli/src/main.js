@@ -10,12 +10,12 @@ const mapActions = {
   create: {
     alias: 'c',
     description: 'create a project',
-    examples: ['mdstt create <project-name>'],
+    examples: ['mini-vue-cli create <project-name>'],
   },
   config: {
     alias: 'conf',
     description: 'config project variable',
-    examples: ['mdstt config set <key> <value>', 'mdstt config get <key>'],
+    examples: ['mini-vue-cli config set <key> <value>', 'mini-vue-cli config get <key>'],
   },
   '*': {
     alias: '',

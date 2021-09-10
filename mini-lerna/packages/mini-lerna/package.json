@@ -1,0 +1,20 @@
+{
+  "name": "mini-lerna",
+  "version": "0.0.0",
+  "description": "lerna",
+  "author": "midoushitongtong <1092879991@qq.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "bin": {
+    "mini-lerna": "cli.js"
+  },
+  "dependencies": {
+    "@lerna/cli": "^0.0.0",
+    "@lerna/init": "^0.0.0",
+    "@lerna/create": "^0.0.0"
+  }
+}

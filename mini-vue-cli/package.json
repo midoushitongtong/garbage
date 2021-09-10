@@ -1,10 +1,10 @@
 {
-  "name": "mdstt-cli",
+  "name": "mini-vue-cli",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "bin": {
-    "mdstt": "./bin/www.js"
+    "mini-vue-cli": "./bin/www.js"
   },
   "scripts": {
     "prettier": "prettier --write \"**/*.js\""

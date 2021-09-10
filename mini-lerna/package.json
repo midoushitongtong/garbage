@@ -1,0 +1,21 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.1.0",
+    "lerna": "^4.0.0",
+    "prettier": "^2.3.2"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint --fix --ext .js packages/**/*.js",
+    "prettier": "prettier --write packages/**/*.js"
+  }
+}

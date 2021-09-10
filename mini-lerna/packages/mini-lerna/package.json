@@ -1,6 +1,6 @@
 {
   "name": "mini-lerna",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "lerna",
   "author": "midoushitongtong <1092879991@qq.com>",
   "homepage": "",
@@ -13,9 +13,9 @@
     "mini-lerna": "cli.js"
   },
   "dependencies": {
-    "@mini-lerna/cli": "^0.1.0",
-    "@mini-lerna/create": "^0.1.0",
-    "@mini-lerna/init": "^0.1.0"
+    "@mini-lerna/cli": "^0.2.0",
+    "@mini-lerna/create": "^0.2.0",
+    "@mini-lerna/init": "^0.2.0"
   },
   "gitHead": "aeeadf9e18511e85939f0dee846cb54b0ba29d20"
 }

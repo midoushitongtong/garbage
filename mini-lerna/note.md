@@ -51,8 +51,10 @@ lerna add init-package-json packages/create
 ### 4. 软连接
 
 ```js
-// 链接每个包 dependencies 中的包与 packages 下的包做软连接
+// 链接 packages 下的每个包中的 dependencies 与 packages 下的包做软连接
 lerna link
+
+// 一般不用上面的形式, 用 yarn 的 workspaces 来管理链接的依赖, 只需要 yarn 即可完成链接操作
 ```
 
 ### 5. 链接 mini-lerna 命令

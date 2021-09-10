@@ -1,6 +1,6 @@
-const cli = require('@lerna/cli');
-const initCmd = require('@lerna/init/command');
-const createCmd = require('@lerna/create/command');
+const cli = require('../mini-lerna-cli');
+const initCmd = require('@mini-lerna/init/command');
+const createCmd = require('@mini-lerna/create/command');
 
 const main = (argv) => {
   return (

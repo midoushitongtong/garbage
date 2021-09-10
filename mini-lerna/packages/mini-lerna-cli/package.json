@@ -1,7 +1,7 @@
 {
-  "name": "@lerna/create",
+  "name": "@mini-lerna/cli",
   "version": "0.0.1",
-  "description": "@lerna/create",
+  "description": "@mini-lerna/cli",
   "author": "midoushitongtong <1092879991@qq.com>",
   "homepage": "",
   "license": "ISC",
@@ -13,8 +13,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "fs-extra": "^10.0.0",
-    "init-package-json": "^2.0.5",
-    "pipy": "^0.0.1"
-  }
+    "yargs": "^17.1.1"
+  },
+  "gitHead": "2b919b3c5f219e87402a457c154097cc3cfd1986"
 }

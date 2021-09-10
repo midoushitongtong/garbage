@@ -16,16 +16,16 @@ lerna init
 
 ```js
 // 第 1 个包: 命令行入口
-lerna create lerna
+lerna create mini-lerna
 
 // 第 2 个包: 解析命令行参数工具
-lerna create @lerna/cli
+lerna create @mini-lerna/cli
 
 // 第 3 个包: 初始化命令
-lerna create @lerna/init
+lerna create @mini-lerna/init
 
 // 第 4 个包: 创建包命令
-lerna create @lerna/create
+lerna create @mini-lerna/create
 ```
 
 ### 3. 安装所需依赖

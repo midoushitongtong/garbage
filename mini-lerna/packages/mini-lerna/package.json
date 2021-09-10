@@ -13,8 +13,9 @@
     "mini-lerna": "cli.js"
   },
   "dependencies": {
-    "@lerna/cli": "^0.0.1",
-    "@lerna/create": "^0.0.1",
-    "@lerna/init": "^0.0.1"
-  }
+    "@mini-lerna/cli": "^0.0.1",
+    "@mini-lerna/create": "^0.0.1",
+    "@mini-lerna/init": "^0.0.1"
+  },
+  "gitHead": "2b919b3c5f219e87402a457c154097cc3cfd1986"
 }

@@ -13,7 +13,7 @@ const lernaCLI = () => {
     })
     .alias('h', 'help') // 配置 help 以及别名
     .alias('v', 'version') // 配置 version 以及别名
-    .epilogue('hello world'); // 结语
+    .epilogue('hello world'); // 打印结语
 };
 
 module.exports = lernaCLI;

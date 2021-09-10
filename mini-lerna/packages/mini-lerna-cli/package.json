@@ -1,6 +1,6 @@
 {
   "name": "@mini-lerna/cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "@mini-lerna/cli",
   "author": "midoushitongtong <1092879991@qq.com>",
   "homepage": "",
@@ -15,5 +15,5 @@
   "dependencies": {
     "yargs": "^17.1.1"
   },
-  "gitHead": "2b919b3c5f219e87402a457c154097cc3cfd1986"
+  "gitHead": "aeeadf9e18511e85939f0dee846cb54b0ba29d20"
 }

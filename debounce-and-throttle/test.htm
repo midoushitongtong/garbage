@@ -1,0 +1,53 @@
+<input />
+<button>btn</button>
+
+<script>
+// 防抖, 将多次触发变成一次触发
+function debounce(fn, timer, triggerNow) {
+	let t = null;
+	return function (...arguments) {
+		if (t) {
+			clearTimeout(t);
+		}
+		
+		t = setTimeout(() => {
+			// 确保 fn 的 this 指向 fn 的调用者
+			fn.apply(this, arguments);
+		}, timer);
+	}
+}
+
+// 节流, 减少触发次数
+function throttle(fn, delay){
+	let t = null;
+	let startTime = new Date().getTime();
+	
+	return function () {
+		const currTime = new Date().getTime();
+		const remaining = delay - (currTime - startTime);
+		
+		clearTimeout(t);
+		
+		if (remaining <= 0) {
+			fn.apply(this, arguments);
+			startTime = new Date().getTime();
+		} else {
+			t = setTimeout(() => {
+				fn.apply(this, arguments);
+			}, remaining);
+		}
+		
+	}
+}
+
+
+function submit(e) {
+	console.log(e);
+	console.log(this);
+}
+
+const btn = document.querySelector('button');
+
+// btn.addEventListener('click', debounce(submit, 3000), false);
+btn.addEventListener('click', throttle(submit, 3000), false);
+</script>

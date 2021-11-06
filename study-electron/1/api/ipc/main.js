@@ -1,7 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-// 老 api
-// 初始化 remote api
-// require('@electron/remote/main').initialize();
 
 // 监听 electron 初始化完成
 app.whenReady().then(() => {
@@ -17,26 +14,21 @@ app.whenReady().then(() => {
     },
   });
 
-  // 老 api
-  // 开启渲染进程中的 remote api
-  // require('@electron/remote/main').enable(browserWindow.webContents);
-
   // 加载 html
   window.loadFile('index.html');
 
   // 打开浏览器调试工具
   window.webContents.openDevTools();
 
-  // 新 api
-  // handle 渲染进程中的 invoke
-  ipcMain.handle('open-baidu-window', async (event, data) => {
-    const window = new BrowserWindow({
-      width: 500,
-      height: 500,
-    });
-
-    window.loadURL('https://baidu.com');
-
-    return 'open ok';
+  // 监听渲染进程发送的信息 (主进程不能主动向渲染进程发送消息)
+  ipcMain.on('sync-message', (event, data) => {
+    console.log(data);
+    // sync 消息用 returnValue 回复渲染进程
+    event.returnValue = 'sync: hello from main process';
+  });
+  ipcMain.on('async-message', (event, data) => {
+    console.log(data);
+    // async 消息用 reply 回复渲染进程
+    event.reply('async-message', 'async: hello from main process');
   });
 });

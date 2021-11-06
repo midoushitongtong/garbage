@@ -20,8 +20,5 @@
   "devDependencies": {
     "electron": "^15.1.2",
     "nodemon": "^2.0.13"
-  },
-  "dependencies": {
-    "@electron/remote": "^2.0.1"
   }
 }

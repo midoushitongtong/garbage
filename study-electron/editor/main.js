@@ -4,8 +4,7 @@ const { app, BrowserWindow } = require('electron');
 app.whenReady().then(() => {
   // 创建渲染进程
   const mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 1000,
+    show: false,
     webPreferences: {
       // 启用 node.js api
       nodeIntegration: true,
@@ -13,10 +12,14 @@ app.whenReady().then(() => {
       contextIsolation: false,
     },
   });
-
-  // 根据 isPackaged 区分生成/开发环境 url
-  const url = app.isPackaged ? 'TODO' : 'http://localhost:3000';
-
+  // 根据 isPackaged 区分生产/开发环境 url
+  const url = app.isPackaged ? 'TODO' : 'http://localhost:5000';
   // 加载 url
   mainWindow.loadURL(url);
+  // 设置窗口大小为全屏显示
+  mainWindow.maximize();
+  // 显示开发控制台
+  mainWindow.webContents.openDevTools();
+  // 显示窗口
+  mainWindow.show();
 });

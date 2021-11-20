@@ -16,7 +16,7 @@ type Props = {
   onFileDelete: (id: string) => void;
 };
 
-const FileSearch = (props: Props) => {
+const FileList = (props: Props) => {
   const { fileList, onFileClick, onFileSaveEdit, onFileDelete } = props;
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -28,7 +28,7 @@ const FileSearch = (props: Props) => {
   const enterPressed = useKeyPress(['Enter']);
   // 是否按下 esc
   const escPressed = useKeyPress(['Escape', 'Esc']);
-  // 如果打开 search, 点击了外部区域, 关闭 search
+  // 如果切换到修改状态, 点击了外部区域, 关闭修改状态
   useOnClickOutside(inputActiveContainerRef, () => {
     if (editId) {
       closeEdit();
@@ -41,7 +41,7 @@ const FileSearch = (props: Props) => {
     setFileTitle(fileListItem.title);
   }, []);
 
-  // 关闭 search
+  // 关闭修改状态
   const closeEdit = React.useCallback(() => {
     setEditId('');
     setFileTitle('');
@@ -67,7 +67,9 @@ const FileSearch = (props: Props) => {
     } else if (enterPressed) {
       submitEdit();
     }
-  }, [closeEdit, enterPressed, escPressed, submitEdit]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enterPressed, escPressed]);
 
   return (
     <div className="file-list">
@@ -126,4 +128,4 @@ const FileSearch = (props: Props) => {
   );
 };
 
-export default FileSearch;
+export default FileList;

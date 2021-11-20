@@ -1,0 +1,7 @@
+@import '../../assets/styles/media';
+
+.home-right {
+  @include deviceType('mobile') {
+    padding-top: 1rem;
+  }
+}

@@ -18,15 +18,15 @@ const FileSearch = (props: Props) => {
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const inputActiveContainerRef = React.useRef<HTMLDivElement | null>(null);
   const [inputActive, setInputActive] = React.useState(false);
-  const [keyword, setKeyword] = React.useState('');
+  const [searchKeyword, setSearchKeyword] = React.useState('');
 
   // 是否按下 enter
   const enterPressed = useKeyPress(['Enter']);
   // 是否按下 esc
   const escPressed = useKeyPress(['Escape', 'Esc']);
-  // 如果打开 search, 点击了外部区域, 关闭 search
+  // 如果打开 search, 点击了外部区域并且没有输入内容, 关闭 search
   useOnClickOutside(inputActiveContainerRef, () => {
-    if (inputActive) {
+    if (inputActive && !searchKeyword) {
       closeSearch();
     }
   });
@@ -38,15 +38,15 @@ const FileSearch = (props: Props) => {
 
   // 关闭 search
   const closeSearch = React.useCallback(() => {
+    setSearchKeyword('');
     setInputActive(false);
-  }, []);
+    onFileSearch('');
+  }, [onFileSearch]);
 
   // 提交搜索
   const submitSearch = React.useCallback(() => {
-    closeSearch();
-    onFileSearch(keyword);
-    setKeyword('');
-  }, [closeSearch, onFileSearch, keyword]);
+    onFileSearch(searchKeyword);
+  }, [onFileSearch, searchKeyword]);
 
   // 每次打开 search 的时候: 光标 focus 到 input 上
   React.useEffect(() => {
@@ -87,8 +87,8 @@ const FileSearch = (props: Props) => {
               type="text"
               placeholder="文档名称"
               className="search-input me-2"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
             />
             {/* close button */}
             <button className="icon-button" onClick={closeSearch}>

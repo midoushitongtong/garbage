@@ -4,4 +4,6 @@ export type FileListItem = {
   title: string;
   body: string;
   createdAt: string;
+
+  isNew?: boolean;
 };

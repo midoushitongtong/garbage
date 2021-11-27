@@ -1,5 +1,4 @@
 import React from 'react';
-import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import { FileListItem } from '../../apis/file/types';
 import FileTabList from '../../components/file-tab-list/FileTabList';
@@ -8,41 +7,90 @@ import FileEditor from '../../components/file-editor/FileEditor';
 
 // component props
 type Props = {
-  tabFileList: FileListItem[];
-  onChangeTabFileList: (fileList: FileListItem[]) => void;
+  fileList: FileListItem[];
+  activeFileId: string;
+  unsaveFileIdList: string[];
+  openFileIdList: string[];
+  closeTab: (id: string) => void;
+  onChangeFileList: (fileList: FileListItem[]) => void;
+  onChangeActiveFileId: (activeFileId: string) => void;
+  onChangeUnsaveFileIdList: (unsaveFileIdList: string[]) => void;
 };
 
 const HomeRight = (props: Props) => {
-  const { tabFileList, onChangeTabFileList } = props;
+  const {
+    fileList,
+    activeFileId,
+    unsaveFileIdList,
+    openFileIdList,
+    closeTab,
+    onChangeFileList,
+    onChangeActiveFileId,
+    onChangeUnsaveFileIdList,
+  } = props;
 
-  // 正在编辑的文件 id
-  const [activeFileId, setActiveFileId] = React.useState<string | undefined>('1');
-  // 未保存的文件 id 列表
-  const [unsaveFileIdList, setUnsaveFileIdList] = React.useState<string[]>([]);
-  // 正在编辑的文件内容
-  const [fileBody, setFileBody] = React.useState(
-    tabFileList.find((item) => item.id === activeFileId)?.body
+  // 已打开的文件列表
+  const openFileList = React.useMemo(() => {
+    return openFileIdList
+      .map((item) => fileList.find((item2) => item2.id === item))
+      .filter((item) => item !== undefined) as FileListItem[];
+  }, [fileList, openFileIdList]);
+  // 正在编辑的文件
+  const activeFile = React.useMemo(() => {
+    return fileList.find((item) => item.id === activeFileId);
+  }, [activeFileId, fileList]);
+
+  // 修改文件内容
+  const handleFileBodyChange = React.useCallback(
+    (id: string, value: string) => {
+      const newFileList = fileList.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            body: value,
+          };
+        }
+        return item;
+      });
+
+      onChangeFileList(newFileList);
+      if (!unsaveFileIdList.includes(id)) {
+        onChangeUnsaveFileIdList([...unsaveFileIdList, id]);
+      }
+    },
+    [fileList, onChangeFileList, onChangeUnsaveFileIdList, unsaveFileIdList]
   );
 
   return (
     <div className="home-right">
-      {/* file tab list */}
-      <FileTabList
-        tabFileList={tabFileList}
-        activeFileId={activeFileId}
-        unsaveFileIdList={unsaveFileIdList}
-        onFileTabClick={(id: string) => {
-          setActiveFileId(id);
-        }}
-        onCloseFileTab={(id: string) => {
-          const newTabFileList = tabFileList.filter((item) => item.id !== id);
-          onChangeTabFileList(newTabFileList);
-          setActiveFileId(newTabFileList[0]?.id);
-        }}
-      />
+      {activeFile ? (
+        <>
+          {/* file tab list */}
+          <FileTabList
+            openFileList={openFileList}
+            activeFileId={activeFileId}
+            unsaveFileIdList={unsaveFileIdList}
+            onFileTabClick={(id: string) => {
+              onChangeActiveFileId(id);
+            }}
+            onCloseFileTab={(id: string) => {
+              closeTab(id);
+            }}
+          />
 
-      {/* markdown editor */}
-      <FileEditor value={fileBody} onChangeValue={setFileBody} />
+          {/* markdown editor */}
+          <FileEditor
+            value={activeFile?.body}
+            onChangeValue={(value) => {
+              handleFileBodyChange(activeFileId, value || '');
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <div className="start-page">选择或者创建新的 Markdown 文档</div>
+        </>
+      )}
     </div>
   );
 };

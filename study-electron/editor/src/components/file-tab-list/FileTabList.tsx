@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 // component props
 type Props = {
-  tabFileList: FileListItem[];
+  openFileList: FileListItem[];
   activeFileId?: string;
   unsaveFileIdList: string[];
   onFileTabClick: (id: string) => void;
@@ -15,7 +15,7 @@ type Props = {
 };
 
 const FileTabList = (props: Props) => {
-  const { tabFileList, activeFileId, unsaveFileIdList, onFileTabClick, onCloseFileTab } = props;
+  const { openFileList, activeFileId, unsaveFileIdList, onFileTabClick, onCloseFileTab } = props;
 
   return (
     <Tabs
@@ -25,7 +25,7 @@ const FileTabList = (props: Props) => {
       activeKey={activeFileId}
       onSelect={(fileId) => fileId && onFileTabClick(fileId)}
     >
-      {tabFileList.map((item) => {
+      {openFileList.map((item) => {
         // 动态拼接 class
         const fileTabListItemClassName = classNames([
           'nav-link',

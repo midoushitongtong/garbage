@@ -4,4 +4,16 @@
   @include deviceType('mobile') {
     padding-top: 1rem;
   }
+
+  .start-page {
+    height: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    text-align: center;
+    color: #666;
+    font-size: 1.5rem;
+  }
 }

@@ -12,7 +12,7 @@ import useKeyPress from '../../hooks/useKeyPress';
 type Props = {
   fileList: FileListItem[];
   onFileClick: (id: string) => void;
-  onFileSaveEdit: (id: string, fileTitle: string) => void;
+  onFileSaveEdit: (fileListItem: FileListItem) => void;
   onFileDelete: (id: string) => void;
 };
 
@@ -21,7 +21,7 @@ const FileList = (props: Props) => {
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const inputActiveContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const [editId, setEditId] = React.useState('');
+  const [editFileListItem, setEditFileListItem] = React.useState<FileListItem | null>(null);
   const [fileTitle, setFileTitle] = React.useState('');
 
   // 是否按下 enter
@@ -30,35 +30,46 @@ const FileList = (props: Props) => {
   const escPressed = useKeyPress(['Escape', 'Esc']);
   // 如果切换到修改状态, 点击了外部区域, 关闭修改状态
   useOnClickOutside(inputActiveContainerRef, () => {
-    if (editId) {
+    if (editFileListItem) {
       closeEdit();
     }
   });
 
   // 切换到修改状态
   const toEdit = React.useCallback((fileListItem: FileListItem) => {
-    setEditId(fileListItem.id);
+    setEditFileListItem(fileListItem);
     setFileTitle(fileListItem.title);
   }, []);
 
   // 关闭修改状态
   const closeEdit = React.useCallback(() => {
-    setEditId('');
+    if (editFileListItem && editFileListItem.isNew) {
+      onFileDelete(editFileListItem.id);
+    }
+
+    setEditFileListItem(null);
     setFileTitle('');
-  }, []);
+  }, [editFileListItem, onFileDelete]);
 
   // 提交修改
   const submitEdit = React.useCallback(() => {
-    onFileSaveEdit(editId, fileTitle);
-    closeEdit();
-  }, [closeEdit, editId, fileTitle, onFileSaveEdit]);
+    if (editFileListItem) {
+      // 标记此文件不再是新文件
+      editFileListItem.isNew = false;
+      onFileSaveEdit({
+        ...editFileListItem,
+        title: fileTitle,
+      });
+      closeEdit();
+    }
+  }, [closeEdit, editFileListItem, fileTitle, onFileSaveEdit]);
 
   // 每次切换到修改状态的时候: 光标 focus 到 input 上
   React.useEffect(() => {
-    if (editId) {
+    if (editFileListItem) {
       inputRef.current?.focus();
     }
-  }, [editId]);
+  }, [editFileListItem]);
 
   // 处理按下 esc, enter
   React.useEffect(() => {
@@ -71,13 +82,21 @@ const FileList = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enterPressed, escPressed]);
 
+  // 如果有新文件, 默认将此文件设置为编辑状态
+  React.useLayoutEffect(() => {
+    const newFile = fileList.find((item) => item.isNew);
+    if (newFile) {
+      toEdit(newFile);
+    }
+  }, [fileList, toEdit]);
+
   return (
     <div className="file-list">
       {fileList.length > 0 ? (
         <ListGroup>
           {fileList.map((item) => (
             <ListGroup.Item key={item.id} className="d-flex align-items-center file-list-item">
-              {item.id !== editId ? (
+              {item.id !== editFileListItem?.id ? (
                 <>
                   {/* markdown icon */}
                   <span className="me-2">

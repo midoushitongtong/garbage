@@ -5,7 +5,6 @@ import useEffectOnce from '../../hooks/useEffectOnce';
 import './Home.scss';
 import HomeLeft from './HomeLeft';
 import HomeRight from './HomeRight';
-// @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 
 const Home = () => {
@@ -91,7 +90,9 @@ const Home = () => {
             <Col xs={12} md={4} lg={3} className="left-panel">
               <HomeLeft
                 fileList={fileList}
+                activeFileId={activeFileId}
                 openFileIdList={openFileIdList}
+                unsaveFileIdList={unsaveFileIdList}
                 closeTab={closeTab}
                 onChangeFileList={(newFileList) => {
                   setFileList(() => newFileList);
@@ -102,6 +103,9 @@ const Home = () => {
                 onChangeActiveFileId={(activeFileId) => {
                   setActiveFileId(() => activeFileId);
                 }}
+                onChangeUnsaveFileIdList={(unsaveFileIdList) => {
+                  setUnsaveFileIdList(() => unsaveFileIdList);
+                }}
                 createNewFile={createNewFile}
               />
             </Col>
@@ -109,8 +113,8 @@ const Home = () => {
               <HomeRight
                 fileList={fileList}
                 activeFileId={activeFileId}
-                unsaveFileIdList={unsaveFileIdList}
                 openFileIdList={openFileIdList}
+                unsaveFileIdList={unsaveFileIdList}
                 closeTab={closeTab}
                 onChangeFileList={(newFileList) => {
                   setFileList(() => newFileList);

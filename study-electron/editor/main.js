@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require('electron');
+// 初始化 remote api
+require('@electron/remote/main').initialize();
 
 // 监听 electron 初始化完成
 app.whenReady().then(() => {
@@ -12,6 +14,10 @@ app.whenReady().then(() => {
       contextIsolation: false,
     },
   });
+
+  // 开启渲染进程中的 remote api
+  require('@electron/remote/main').enable(mainWindow.webContents);
+
   // 根据 isPackaged 区分生产/开发环境 url
   const url = app.isPackaged ? 'TODO' : 'http://localhost:5000';
   // 加载 url

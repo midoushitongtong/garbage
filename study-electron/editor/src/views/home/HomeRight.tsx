@@ -9,8 +9,8 @@ import FileEditor from '../../components/file-editor/FileEditor';
 type Props = {
   fileList: FileListItem[];
   activeFileId: string;
-  unsaveFileIdList: string[];
   openFileIdList: string[];
+  unsaveFileIdList: string[];
   closeTab: (id: string) => void;
   onChangeFileList: (fileList: FileListItem[]) => void;
   onChangeActiveFileId: (activeFileId: string) => void;
@@ -21,8 +21,8 @@ const HomeRight = (props: Props) => {
   const {
     fileList,
     activeFileId,
-    unsaveFileIdList,
     openFileIdList,
+    unsaveFileIdList,
     closeTab,
     onChangeFileList,
     onChangeActiveFileId,

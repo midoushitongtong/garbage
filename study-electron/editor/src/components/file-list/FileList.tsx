@@ -12,7 +12,7 @@ import useKeyPress from '../../hooks/useKeyPress';
 type Props = {
   fileList: FileListItem[];
   onFileClick: (id: string) => void;
-  onFileSaveEdit: (fileListItem: FileListItem) => void;
+  onFileSaveEdit: (fileListItem: FileListItem, isNew: boolean) => void;
   onFileDelete: (id: string) => void;
 };
 
@@ -43,6 +43,7 @@ const FileList = (props: Props) => {
 
   // 关闭修改状态
   const closeEdit = React.useCallback(() => {
+    // 如果是新文件就删除
     if (editFileListItem && editFileListItem.isNew) {
       onFileDelete(editFileListItem.id);
     }
@@ -53,13 +54,23 @@ const FileList = (props: Props) => {
 
   // 提交修改
   const submitEdit = React.useCallback(() => {
+    if (!fileTitle) {
+      return;
+    }
+
     if (editFileListItem) {
-      // 标记此文件不再是新文件
+      onFileSaveEdit(
+        {
+          ...editFileListItem,
+          title: fileTitle,
+          isNew: false,
+        },
+        !!editFileListItem.isNew
+      );
+
+      // 标记此文件不再是新文件, 防止 closeEdit 将文件删除
       editFileListItem.isNew = false;
-      onFileSaveEdit({
-        ...editFileListItem,
-        title: fileTitle,
-      });
+
       closeEdit();
     }
   }, [closeEdit, editFileListItem, fileTitle, onFileSaveEdit]);

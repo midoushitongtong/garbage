@@ -6,6 +6,7 @@ import './Home.scss';
 import HomeLeft from './HomeLeft';
 import HomeRight from './HomeRight';
 import { v4 as uuidv4 } from 'uuid';
+import { getFileListFromStore } from '../../utils/file';
 
 const Home = () => {
   const [initDataLoading, setInitDataLoading] = React.useState(true);
@@ -19,27 +20,8 @@ const Home = () => {
   const [unsaveFileIdList, setUnsaveFileIdList] = React.useState<string[]>([]);
 
   // init data
-  const initData = React.useCallback(() => {
-    const fileList = [
-      {
-        id: '1',
-        title: 'first post',
-        body: '# this is the first post content',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: '2',
-        title: 'second post',
-        body: '# this is the second post content',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: '3',
-        title: 'three post',
-        body: '# this is the three post content',
-        createdAt: new Date().toISOString(),
-      },
-    ];
+  const initData = React.useCallback(async () => {
+    const fileList = await getFileListFromStore();
 
     setFileList(fileList);
     setInitDataLoading(false);

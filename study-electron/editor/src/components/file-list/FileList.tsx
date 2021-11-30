@@ -7,6 +7,8 @@ import { FileListItem } from '../../apis/file/types';
 import { Form, ListGroup } from 'react-bootstrap';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPress from '../../hooks/useKeyPress';
+import { checkFileExistsFromStore } from '../../utils/file';
+import { notification } from 'antd';
 
 // component props
 type Props = {
@@ -53,8 +55,20 @@ const FileList = (props: Props) => {
   }, [editFileListItem, onFileDelete]);
 
   // 提交修改
-  const submitEdit = React.useCallback(() => {
+  const submitEdit = React.useCallback(async () => {
     if (!fileTitle) {
+      return;
+    }
+
+    const exists = await checkFileExistsFromStore(fileTitle);
+
+    if (exists) {
+      notification.error({
+        message: `此文件已存在: ${fileTitle}`,
+        description: '请更换其他文件名称',
+        duration: 5,
+      });
+
       return;
     }
 

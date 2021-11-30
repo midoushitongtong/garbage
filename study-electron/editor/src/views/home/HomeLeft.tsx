@@ -5,8 +5,13 @@ import { FileListItem } from '../../apis/file/types';
 import './HomeLeft.scss';
 import FileBottomButton from '../../components/file-bottom-button/FileBottomButton';
 import { faPlus, faFileImport, faSave } from '@fortawesome/free-solid-svg-icons';
-import { getFileSaveLocation, renameFile, writeFile } from '../../utils/file';
-import path from 'path';
+import {
+  saveFileToStore,
+  renameFileToStore,
+  saveFileListToStore,
+  deleteFileToStore,
+  getFileFromStore,
+} from '../../utils/file';
 
 // components props
 type Props = {
@@ -54,55 +59,67 @@ const HomeLeft = (props: Props) => {
 
   // handle file click
   const handleFileClick = React.useCallback(
-    (id: string) => {
+    async (id: string) => {
       onChangeActiveFileId(id);
+
       if (!openFileIdList.includes(id)) {
         onChangeOpenFileIdList([...openFileIdList, id]);
       }
-    },
-    [onChangeActiveFileId, onChangeOpenFileIdList, openFileIdList]
-  );
 
-  // handle file save edit
-  const handleFileSaveEdit = React.useCallback(
-    async (fileListItem: FileListItem, isNew: boolean) => {
-      // file save location
-      const fileSaveLocation = getFileSaveLocation();
-
-      try {
-        // 文件路径
-        const filePath = path.join(fileSaveLocation, `${fileListItem.title}.md`);
-
-        if (isNew) {
-          // 创建新文件
-          await writeFile(filePath, fileListItem.body);
-
-          console.log(`已创建新文件: ${filePath}`);
-        } else {
-          // 重命名文件
-          // 先拿到旧文件
-          const oldFileListItem = fileList.find((item) => item.id === fileListItem.id);
-
-          if (oldFileListItem) {
-            // 旧文件地址
-            const oldFilePath = path.join(fileSaveLocation, `${oldFileListItem.title}.md`);
-            // 重命名文件
-            await renameFile(oldFilePath, filePath);
-
-            console.log(`已重命名文件: ${filePath}`);
-          }
-        }
-
+      // 获取文件内容 (只获取一次, 已经获取过了就不需要再次获取)
+      const fileListItem = fileList.find((item) => item.id === id);
+      if (fileListItem && !fileListItem.isLoad) {
+        const fileBody = await getFileFromStore(fileListItem);
         onChangeFileList(
           fileList.map((item) => {
-            if (item.id === fileListItem.id) {
+            if (item.id === id) {
               return {
-                ...fileListItem,
+                ...item,
+                body: fileBody,
+                isLoad: true, // 标记已经获取过了
               };
             }
             return item;
           })
         );
+      }
+    },
+    [fileList, onChangeActiveFileId, onChangeFileList, onChangeOpenFileIdList, openFileIdList]
+  );
+
+  // handle file save edit
+  const handleFileSaveEdit = React.useCallback(
+    async (fileListItem: FileListItem, isNew: boolean) => {
+      try {
+        const newFileList = fileList.map((item) => {
+          if (item.id === fileListItem.id) {
+            return {
+              ...fileListItem,
+            };
+          }
+          return item;
+        });
+
+        if (isNew) {
+          // 创建新文件
+          await saveFileToStore(fileListItem);
+          // 保存文件列表
+          await saveFileListToStore(newFileList);
+          onChangeFileList(newFileList);
+        } else {
+          // 重命名文件
+          // 先拿到旧文件
+          const oldFileListItem = fileList.find((item) => item.id === fileListItem.id);
+          if (oldFileListItem) {
+            // 重命名文件
+            await renameFileToStore(oldFileListItem, fileListItem);
+            // 保存文件列表
+            await saveFileListToStore(newFileList);
+            onChangeFileList(newFileList);
+          } else {
+            console.log(`未找到旧文件, id: ${fileListItem.id}`);
+          }
+        }
       } catch (error) {
         console.log(error);
       }
@@ -112,28 +129,33 @@ const HomeLeft = (props: Props) => {
 
   // handle file delete
   const handleFileDelete = React.useCallback(
-    (id: string) => {
-      onChangeFileList(fileList.filter((item) => item.id !== id));
+    async (id: string) => {
+      const fileListItem = fileList.find((item) => item.id === id);
+      const newFileList = fileList.filter((item) => item.id !== id);
 
-      closeTab(id);
+      if (fileListItem) {
+        // 加 isNew 判断, 不是新文件才进行 store 操作
+        if (!fileListItem.isNew) {
+          // 删除文件
+          await deleteFileToStore(fileListItem);
+          // 保存文件列表
+          await saveFileListToStore(newFileList);
+        }
+
+        onChangeFileList(newFileList);
+        closeTab(id);
+      }
     },
     [closeTab, fileList, onChangeFileList]
   );
 
   // 保存当前文件
   const saveCurrentFile = React.useCallback(async () => {
-    // file save location
-    const fileSaveLocation = getFileSaveLocation();
-
     try {
       if (activeFile) {
-        const filePath = path.join(fileSaveLocation, `${activeFile.title}.md`);
-
-        await writeFile(filePath, activeFile.body);
+        await saveFileToStore(activeFile);
 
         onChangeUnsaveFileIdList(unsaveFileIdList.filter((item) => item !== activeFile.id));
-
-        console.log(`已保存文件: ${filePath}`);
       }
     } catch (error) {
       console.log(error);

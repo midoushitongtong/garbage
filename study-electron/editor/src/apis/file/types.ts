@@ -2,8 +2,9 @@
 export type FileListItem = {
   id: string;
   title: string;
-  body: string;
+  body?: string;
   createdAt: string;
 
   isNew?: boolean;
+  isLoad?: boolean;
 };

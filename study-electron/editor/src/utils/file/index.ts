@@ -34,7 +34,7 @@ export const deleteFile = (path: string) => {
 };
 
 // userData 保存的路径
-const getUserDataSaveLocation = () => {
+export const getUserDataSaveLocation = () => {
   const dir = path.join(remote.app.getPath('userData'), 'editor');
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
@@ -82,6 +82,16 @@ export const getFileFromStore = async (fileListItem: FileListItem) => {
 
     return result;
   }
+};
+
+// 返回 store 中的 path
+export const getFilePathFromStore = async (title: string) => {
+  // user data save location
+  const userDataSaveLocation = getUserDataSaveLocation();
+  // 文件路径
+  const filePath = path.join(userDataSaveLocation, `${title}.md`);
+
+  return filePath;
 };
 
 // 从 store 判断文件是否已经存在

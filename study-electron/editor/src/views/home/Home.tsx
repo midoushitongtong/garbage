@@ -8,6 +8,8 @@ import HomeRight from './HomeRight';
 import { v4 as uuidv4 } from 'uuid';
 import { getFileListFromStore } from '../../utils/file';
 
+const remote = require('@electron/remote');
+
 const Home = () => {
   const [initDataLoading, setInitDataLoading] = React.useState(true);
   // 文件列表
@@ -47,7 +49,8 @@ const Home = () => {
     const newId = uuidv4();
 
     const newFileList = [
-      ...fileList,
+      // 过滤新文件
+      ...fileList.filter((item) => !item.isNew),
       {
         id: newId,
         title: '',
@@ -63,6 +66,18 @@ const Home = () => {
   useEffectOnce(() => {
     initData();
   });
+
+  React.useEffect(() => {
+    const handleCreateNewFile = () => {
+      createNewFile();
+    };
+
+    remote.getCurrentWindow().webContents.on('create-new-file', handleCreateNewFile);
+
+    return () => {
+      remote.getCurrentWindow().webContents.removeListener('create-new-file', handleCreateNewFile);
+    };
+  }, [createNewFile]);
 
   return (
     <div className="home">

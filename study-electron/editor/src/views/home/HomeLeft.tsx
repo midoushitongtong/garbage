@@ -11,7 +11,14 @@ import {
   saveFileListToStore,
   deleteFileToStore,
   getFileFromStore,
+  checkFileExistsFromStore,
+  readFile,
 } from '../../utils/file';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import { notification } from 'antd';
+
+const remote = require('@electron/remote');
 
 // components props
 type Props = {
@@ -162,6 +169,70 @@ const HomeLeft = (props: Props) => {
     }
   }, [activeFile, onChangeUnsaveFileIdList, unsaveFileIdList]);
 
+  // 导入文件
+  const handleImportFile = React.useCallback(async () => {
+    try {
+      const result = await remote.dialog.showOpenDialog({
+        title: '请选择需要导入的 markdown 文件',
+        properties: ['openFile', 'multiSelections'],
+        filters: [{ name: 'Markdown files', extensions: ['md'] }],
+      });
+
+      if (!result.canceled) {
+        // 过滤 path 已经存在的文件不能在导入
+        const filterFilePaths: string[] = [];
+        for await (const item of result.filePaths) {
+          const fileName = path.basename(item, path.extname(item));
+          const exists = await checkFileExistsFromStore(fileName);
+          if (exists) {
+            notification.error({
+              message: `此文件已存在: ${fileName}`,
+              description: '请更换其他文件名称',
+              duration: 5,
+            });
+          } else {
+            filterFilePaths.push(item);
+          }
+        }
+
+        // 为什么要加 > 0 判断
+        // 假如一次打开 2 个文件选择 modal 后者可能会覆盖前者 (第 1 个 modal 保存后的 fileList 第 2 个 modal 无法获取最新的 fileList)
+        if (filterFilePaths.length > 0) {
+          // 组成需要导入的文件信息
+          const importFileList: FileListItem[] = [];
+          for await (const item of filterFilePaths) {
+            const importFileListItem: FileListItem = {
+              id: uuidv4(),
+              title: path.basename(item, path.extname(item)),
+              body: await readFile(item),
+              createdAt: new Date().toISOString(),
+            };
+            importFileList.push(importFileListItem);
+          }
+
+          // 创建新文件
+          for await (const item of importFileList) {
+            await saveFileToStore(item);
+          }
+
+          const newFileList = [...fileList, ...importFileList];
+
+          // 保存文件列表
+          await saveFileListToStore(newFileList);
+          onChangeFileList(newFileList);
+
+          remote.dialog.showMessageBox({
+            type: 'info',
+            title: '我的云文档',
+            message: `成功导入 ${importFileList.length} 个文件`,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [fileList, onChangeFileList]);
+
   return (
     <nav className="home-left">
       <div className="home-left-content">
@@ -185,7 +256,12 @@ const HomeLeft = (props: Props) => {
       {/* file bottom button */}
       <div className="home-left-bottom">
         <FileBottomButton icon={faPlus} text="新建" variant="primary" onClick={createNewFile} />
-        <FileBottomButton icon={faFileImport} text="导入" variant="success" />
+        <FileBottomButton
+          icon={faFileImport}
+          text="导入"
+          variant="success"
+          onClick={handleImportFile}
+        />
         {activeFile && (
           <FileBottomButton icon={faSave} text="保存" variant="warning" onClick={saveCurrentFile} />
         )}

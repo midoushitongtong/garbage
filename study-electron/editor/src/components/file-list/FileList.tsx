@@ -9,6 +9,8 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPress from '../../hooks/useKeyPress';
 import { checkFileExistsFromStore } from '../../utils/file';
 import { notification } from 'antd';
+import useContextMenu from '../../hooks/useContextMenu';
+import { getParentNode } from '../../utils/dom';
 
 // component props
 type Props = {
@@ -20,6 +22,57 @@ type Props = {
 
 const FileList = (props: Props) => {
   const { fileList, onFileClick, onFileSaveEdit, onFileDelete } = props;
+
+  // 右键 file list item 打开菜单
+  const { currentClickedElement } = useContextMenu(
+    [
+      {
+        label: '打开',
+        click: () => {
+          const fileListItemElement = getParentNode(
+            currentClickedElement.current,
+            'file-list-item'
+          ) as HTMLDivElement | null;
+
+          if (fileListItemElement && fileListItemElement.dataset.id) {
+            onFileClick(fileListItemElement.dataset.id);
+          }
+        },
+      },
+      {
+        label: '重命名',
+        click: () => {
+          const fileListItemElement = getParentNode(
+            currentClickedElement.current,
+            'file-list-item'
+          ) as HTMLDivElement | null;
+
+          if (fileListItemElement && fileListItemElement.dataset.id) {
+            const fileListItem = fileList.find(
+              (item) => item.id === fileListItemElement.dataset.id
+            );
+            if (fileListItem) {
+              toEdit(fileListItem);
+            }
+          }
+        },
+      },
+      {
+        label: '删除',
+        click: () => {
+          const fileListItem = getParentNode(
+            currentClickedElement.current,
+            'file-list-item'
+          ) as HTMLDivElement | null;
+
+          if (fileListItem && fileListItem.dataset.id) {
+            onFileDelete(fileListItem.dataset.id);
+          }
+        },
+      },
+    ],
+    '.file-list'
+  );
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const inputActiveContainerRef = React.useRef<HTMLDivElement | null>(null);
@@ -60,19 +113,19 @@ const FileList = (props: Props) => {
       return;
     }
 
-    const exists = await checkFileExistsFromStore(fileTitle);
-
-    if (exists) {
-      notification.error({
-        message: `此文件已存在: ${fileTitle}`,
-        description: '请更换其他文件名称',
-        duration: 5,
-      });
-
-      return;
-    }
-
     if (editFileListItem) {
+      const exists = await checkFileExistsFromStore(fileTitle);
+
+      if (exists) {
+        notification.error({
+          message: `此文件已存在: ${fileTitle}`,
+          description: '请更换其他文件名称',
+          duration: 5,
+        });
+
+        return;
+      }
+
       onFileSaveEdit(
         {
           ...editFileListItem,
@@ -113,14 +166,18 @@ const FileList = (props: Props) => {
     if (newFile) {
       toEdit(newFile);
     }
-  }, [fileList, toEdit]);
+  }, [closeEdit, fileList, toEdit]);
 
   return (
     <div className="file-list">
       {fileList.length > 0 ? (
         <ListGroup>
           {fileList.map((item) => (
-            <ListGroup.Item key={item.id} className="d-flex align-items-center file-list-item">
+            <ListGroup.Item
+              key={item.id}
+              className="d-flex align-items-center file-list-item"
+              data-id={item.id}
+            >
               {item.id !== editFileListItem?.id ? (
                 <>
                   {/* markdown icon */}

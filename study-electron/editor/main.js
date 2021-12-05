@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 // 初始化 remote api
 require('@electron/remote/main').initialize();
 
@@ -28,4 +28,6 @@ app.whenReady().then(() => {
   mainWindow.webContents.openDevTools();
   // 显示窗口
   mainWindow.show();
+  // 清空默认菜单
+  Menu.setApplicationMenu(null);
 });

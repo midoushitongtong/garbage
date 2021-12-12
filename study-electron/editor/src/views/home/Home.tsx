@@ -6,9 +6,8 @@ import './Home.scss';
 import HomeLeft from './HomeLeft';
 import HomeRight from './HomeRight';
 import { v4 as uuidv4 } from 'uuid';
-import { getFileListFromStore } from '../../utils/file';
-
-const remote = require('@electron/remote');
+import { getFileListFromStore, saveFileToStore } from '../../utils/file';
+import useWebContentsListener from '../../hooks/useWebContentsListener';
 
 const Home = () => {
   const [initDataLoading, setInitDataLoading] = React.useState(true);
@@ -20,6 +19,10 @@ const Home = () => {
   const [activeFileId, setActiveFileId] = React.useState('');
   // 未保存的文件列表 id
   const [unsaveFileIdList, setUnsaveFileIdList] = React.useState<string[]>([]);
+  // 正在编辑的文件
+  const activeFile = React.useMemo(() => {
+    return fileList.find((item) => item.id === activeFileId);
+  }, [activeFileId, fileList]);
 
   // init data
   const initData = React.useCallback(async () => {
@@ -63,21 +66,27 @@ const Home = () => {
     setFileList(() => newFileList);
   }, [fileList]);
 
+  // 保存当前文件
+  const saveCurrentFile = React.useCallback(async () => {
+    try {
+      if (activeFile) {
+        await saveFileToStore(activeFile);
+
+        setUnsaveFileIdList(unsaveFileIdList.filter((item) => item !== activeFile.id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [activeFile, unsaveFileIdList]);
+
   useEffectOnce(() => {
     initData();
   });
 
-  React.useEffect(() => {
-    const handleCreateNewFile = () => {
-      createNewFile();
-    };
-
-    remote.getCurrentWindow().webContents.on('create-new-file', handleCreateNewFile);
-
-    return () => {
-      remote.getCurrentWindow().webContents.removeListener('create-new-file', handleCreateNewFile);
-    };
-  }, [createNewFile]);
+  useWebContentsListener({
+    'create-new-file': createNewFile,
+    'save-edit-file': saveCurrentFile,
+  });
 
   return (
     <div className="home">
@@ -87,9 +96,7 @@ const Home = () => {
             <Col xs={12} md={4} lg={3} className="left-panel">
               <HomeLeft
                 fileList={fileList}
-                activeFileId={activeFileId}
                 openFileIdList={openFileIdList}
-                unsaveFileIdList={unsaveFileIdList}
                 closeTab={closeTab}
                 onChangeFileList={(newFileList) => {
                   setFileList(() => newFileList);
@@ -99,9 +106,6 @@ const Home = () => {
                 }}
                 onChangeActiveFileId={(activeFileId) => {
                   setActiveFileId(() => activeFileId);
-                }}
-                onChangeUnsaveFileIdList={(unsaveFileIdList) => {
-                  setUnsaveFileIdList(() => unsaveFileIdList);
                 }}
                 createNewFile={createNewFile}
               />

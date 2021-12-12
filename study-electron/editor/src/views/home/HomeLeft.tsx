@@ -4,7 +4,7 @@ import FileList from '../../components/file-list/FileList';
 import { FileListItem } from '../../apis/file/types';
 import './HomeLeft.scss';
 import FileBottomButton from '../../components/file-bottom-button/FileBottomButton';
-import { faPlus, faFileImport, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faFileImport } from '@fortawesome/free-solid-svg-icons';
 import {
   saveFileToStore,
   renameFileToStore,
@@ -17,41 +17,31 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import { notification } from 'antd';
+import useWebContentsListener from '../../hooks/useWebContentsListener';
 
 const remote = require('@electron/remote');
 
 // components props
 type Props = {
   fileList: FileListItem[];
-  activeFileId: string;
-  unsaveFileIdList: string[];
   openFileIdList: string[];
   closeTab: (id: string) => void;
   onChangeFileList: (fileList: FileListItem[]) => void;
   onChangeActiveFileId: (activeFileId: string) => void;
   onChangeOpenFileIdList: (openFileIdList: string[]) => void;
-  onChangeUnsaveFileIdList: (unsaveFileIdList: string[]) => void;
   createNewFile: () => void;
 };
 
 const HomeLeft = (props: Props) => {
   const {
     fileList,
-    activeFileId,
     openFileIdList,
-    unsaveFileIdList,
     closeTab,
     onChangeFileList,
     onChangeActiveFileId,
     onChangeOpenFileIdList,
-    onChangeUnsaveFileIdList,
     createNewFile,
   } = props;
-
-  // 正在编辑的文件
-  const activeFile = React.useMemo(() => {
-    return fileList.find((item) => item.id === activeFileId);
-  }, [activeFileId, fileList]);
 
   // search keyword
   const [searchKeyword, setSearchKeyword] = React.useState('');
@@ -156,19 +146,6 @@ const HomeLeft = (props: Props) => {
     [closeTab, fileList, onChangeFileList]
   );
 
-  // 保存当前文件
-  const saveCurrentFile = React.useCallback(async () => {
-    try {
-      if (activeFile) {
-        await saveFileToStore(activeFile);
-
-        onChangeUnsaveFileIdList(unsaveFileIdList.filter((item) => item !== activeFile.id));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [activeFile, onChangeUnsaveFileIdList, unsaveFileIdList]);
-
   // 导入文件
   const handleImportFile = React.useCallback(async () => {
     try {
@@ -233,6 +210,10 @@ const HomeLeft = (props: Props) => {
     }
   }, [fileList, onChangeFileList]);
 
+  useWebContentsListener({
+    'import-file': handleImportFile,
+  });
+
   return (
     <nav className="home-left">
       <div className="home-left-content">
@@ -262,9 +243,6 @@ const HomeLeft = (props: Props) => {
           variant="success"
           onClick={handleImportFile}
         />
-        {activeFile && (
-          <FileBottomButton icon={faSave} text="保存" variant="warning" onClick={saveCurrentFile} />
-        )}
       </div>
     </nav>
   );

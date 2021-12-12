@@ -5,6 +5,7 @@ import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPress from '../../hooks/useKeyPress';
 import './FileSearch.scss';
+import useWebContentsListener from '../../hooks/useWebContentsListener';
 
 // component props
 type Props = {
@@ -63,6 +64,10 @@ const FileSearch = (props: Props) => {
       submitSearch();
     }
   }, [closeSearch, enterPressed, escPressed, inputActive, submitSearch]);
+
+  useWebContentsListener({
+    'search-file': openSearch,
+  });
 
   return (
     <div className="file-search">

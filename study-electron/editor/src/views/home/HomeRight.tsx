@@ -43,6 +43,11 @@ const HomeRight = (props: Props) => {
   // 修改文件内容
   const handleFileBodyChange = React.useCallback(
     (id: string, value: string) => {
+      if (value === activeFile?.body) {
+        // 内容相同不做修改
+        return;
+      }
+
       const newFileList = fileList.map((item) => {
         if (item.id === id) {
           return {
@@ -58,7 +63,7 @@ const HomeRight = (props: Props) => {
         onChangeUnsaveFileIdList([...unsaveFileIdList, id]);
       }
     },
-    [fileList, onChangeFileList, onChangeUnsaveFileIdList, unsaveFileIdList]
+    [activeFile?.body, fileList, onChangeFileList, onChangeUnsaveFileIdList, unsaveFileIdList]
   );
 
   return (

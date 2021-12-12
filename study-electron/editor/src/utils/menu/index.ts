@@ -153,12 +153,9 @@ if (process.platform === 'darwin') {
       {
         label: '设置',
         accelerator: 'Command+,',
-        click: (menuItme: any, browserWindow: any, event: any) => {},
-      },
-      {
-        label: '服务',
-        role: 'services',
-        submenu: [],
+        click: (menuItme: any, browserWindow: any, event: any) => {
+          browserWindow.webContents.emit('open-setting-window');
+        },
       },
       {
         type: 'separator',
@@ -171,7 +168,7 @@ if (process.platform === 'darwin') {
       {
         label: '隐藏其它',
         accelerator: 'Command+Alt+H',
-        role: 'hideothers',
+        role: 'hideOthers',
       },
       {
         label: '显示全部',
@@ -193,6 +190,8 @@ if (process.platform === 'darwin') {
   menuTemplate[0].submenu.push({
     label: '设置',
     accelerator: 'Ctrl+,',
-    click: (menuItme: any, browserWindow: any, event: any) => {},
+    click: (menuItme: any, browserWindow: any, event: any) => {
+      browserWindow.webContents.emit('open-setting-window');
+    },
   });
 }

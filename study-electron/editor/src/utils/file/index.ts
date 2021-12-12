@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { FileListItem } from '../../apis/file/types';
+import { AppConfig } from './types';
 
 const remote = require('@electron/remote');
 
@@ -34,8 +35,26 @@ export const deleteFile = (path: string) => {
 };
 
 // userData 保存的路径
-export const getUserDataSaveLocation = () => {
+const getUserDataSaveLocation = async () => {
   const dir = path.join(remote.app.getPath('userData'), 'editor');
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  return dir;
+};
+
+// file 保存的路径
+export const getFileSaveLocation = async () => {
+  // app config
+  const appConfig = await getAppConfigFromStore();
+
+  // user data save location
+  const userDataSaveLocation = await getUserDataSaveLocation();
+
+  const dir = appConfig.fileStorePath
+    ? path.join(appConfig.fileStorePath)
+    : path.join(userDataSaveLocation, 'file-list');
+
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
@@ -45,7 +64,7 @@ export const getUserDataSaveLocation = () => {
 // 从 store 获取文件列表
 export const getFileListFromStore = async (): Promise<FileListItem[]> => {
   // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  const userDataSaveLocation = await getUserDataSaveLocation();
   // 文件列表保存路径
   const filePath = path.join(userDataSaveLocation, 'fileList.json');
   // 没有文件返回空数组
@@ -69,10 +88,10 @@ export const getFileListFromStore = async (): Promise<FileListItem[]> => {
 
 // 从 store 获取文件
 export const getFileFromStore = async (fileListItem: FileListItem) => {
-  // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  // file save location
+  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(userDataSaveLocation, `${fileListItem.title}.md`);
+  const filePath = path.join(fileSaveLocation, `${fileListItem.title}.md`);
 
   if (!fs.existsSync(filePath)) {
     console.log(`未找到文件: ${filePath}`);
@@ -86,20 +105,20 @@ export const getFileFromStore = async (fileListItem: FileListItem) => {
 
 // 返回 store 中的 path
 export const getFilePathFromStore = async (title: string) => {
-  // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  // file save location
+  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(userDataSaveLocation, `${title}.md`);
+  const filePath = path.join(fileSaveLocation, `${title}.md`);
 
   return filePath;
 };
 
 // 从 store 判断文件是否已经存在
 export const checkFileExistsFromStore = async (title: string) => {
-  // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  // file save location
+  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(userDataSaveLocation, `${title}.md`);
+  const filePath = path.join(fileSaveLocation, `${title}.md`);
 
   return fs.existsSync(filePath);
 };
@@ -107,7 +126,7 @@ export const checkFileExistsFromStore = async (title: string) => {
 // 保存文件列表到 store
 export const saveFileListToStore = async (fileList: FileListItem[]) => {
   // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  const userDataSaveLocation = await getUserDataSaveLocation();
   // 文件列表保存路径
   const filePath = path.join(userDataSaveLocation, 'fileList.json');
   const fileListWithStore = fileList.map((item) => ({
@@ -123,10 +142,10 @@ export const saveFileListToStore = async (fileList: FileListItem[]) => {
 
 // 保存文件到 store
 export const saveFileToStore = async (fileListItem: FileListItem) => {
-  // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  // file save location
+  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(userDataSaveLocation, `${fileListItem.title}.md`);
+  const filePath = path.join(fileSaveLocation, `${fileListItem.title}.md`);
   // 保存文件
   await writeFile(filePath, fileListItem.body || '');
 
@@ -138,12 +157,12 @@ export const renameFileToStore = async (
   oldFileListItem: FileListItem,
   newFileListItem: FileListItem
 ) => {
-  // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  // file save location
+  const fileSaveLocation = await getFileSaveLocation();
   // 旧文件路径
-  const oldFilePath = path.join(userDataSaveLocation, `${oldFileListItem.title}.md`);
+  const oldFilePath = path.join(fileSaveLocation, `${oldFileListItem.title}.md`);
   // 新文件路径
-  const newFilePath = path.join(userDataSaveLocation, `${newFileListItem.title}.md`);
+  const newFilePath = path.join(fileSaveLocation, `${newFileListItem.title}.md`);
 
   if (!fs.existsSync(oldFilePath)) {
     console.log(`未找到旧文件: ${oldFilePath}`);
@@ -157,10 +176,10 @@ export const renameFileToStore = async (
 
 // 删除文件到 store
 export const deleteFileToStore = async (fileListItem: FileListItem) => {
-  // user data save location
-  const userDataSaveLocation = getUserDataSaveLocation();
+  // file save location
+  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(userDataSaveLocation, `${fileListItem.title}.md`);
+  const filePath = path.join(fileSaveLocation, `${fileListItem.title}.md`);
 
   if (!fs.existsSync(filePath)) {
     console.log(`未找到需要删除的文件: ${filePath}`);
@@ -170,4 +189,73 @@ export const deleteFileToStore = async (fileListItem: FileListItem) => {
 
     console.log(`已删除文件: ${filePath}`);
   }
+};
+
+// 将 store 中的文件移动到新目录
+export const moveFileToNewDirectory = async (oldDirectory: string, newDirectory: string) => {
+  const fileList = await getFileListFromStore();
+
+  for await (const item of fileList) {
+    if (await checkFileExistsFromStore(item.title)) {
+      if (!fs.existsSync(newDirectory)) {
+        fs.mkdirSync(newDirectory);
+      }
+
+      await fs.promises
+        .rename(
+          path.join(oldDirectory, `${item.title}.md`),
+          path.join(newDirectory, `${item.title}.md`)
+        )
+        .catch((result) => {
+          console.log(`文件移动失败: ${item.title}`);
+        });
+    }
+  }
+
+  console.log(`文件已移动到新目录: ${newDirectory}`);
+};
+
+// 从 store 获取 app 配置
+export const getAppConfigFromStore = async (): Promise<AppConfig> => {
+  // user data save location
+  const userDataSaveLocation = await getUserDataSaveLocation();
+  // 文件列表保存路径
+  const filePath = path.join(userDataSaveLocation, 'appConfig.json');
+  // 没有文件返回空对象
+  if (!fs.existsSync(filePath)) {
+    return {};
+  }
+  // 读取文件
+  let result: any = await readFile(filePath);
+  if (result) {
+    try {
+      result = JSON.parse(result);
+    } catch (error) {
+      result = {};
+      console.log('app 配置数据解析失败');
+    }
+  } else {
+    result = {};
+  }
+  return result as object;
+};
+
+// 保存 app 配置到 store
+export const saveAppConfigToStore = async (appConfig: Partial<AppConfig>) => {
+  // user data save location
+  const userDataSaveLocation = await getUserDataSaveLocation();
+  // 文件列表保存路径
+  const filePath = path.join(userDataSaveLocation, 'appConfig.json');
+  // 先拿到当前文件
+  const currentAppConfig = await getAppConfigFromStore();
+  // 保存文件
+  await writeFile(
+    filePath,
+    JSON.stringify({
+      ...currentAppConfig,
+      ...appConfig,
+    })
+  );
+
+  console.log(`app 配置已保存: ${filePath}`);
 };

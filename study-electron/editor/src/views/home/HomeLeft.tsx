@@ -165,7 +165,7 @@ const HomeLeft = (props: Props) => {
             notification.error({
               message: `此文件已存在: ${fileName}`,
               description: '请更换其他文件名称',
-              duration: 5,
+              duration: 3,
             });
           } else {
             filterFilePaths.push(item);

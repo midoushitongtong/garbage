@@ -120,7 +120,7 @@ const FileList = (props: Props) => {
         notification.error({
           message: `此文件已存在: ${fileTitle}`,
           description: '请更换其他文件名称',
-          duration: 5,
+          duration: 3,
         });
 
         return;

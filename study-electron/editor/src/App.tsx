@@ -1,19 +1,22 @@
 import './App.scss';
 import Home from './views/home/Home';
-import { menuTemplate } from './utils/menu';
 import BackendHandler from './components/backend-handler/BackendHandler';
-
-const remote = require('@electron/remote');
-
-// 设置 app 菜单
-const menu = remote.Menu.buildFromTemplate(menuTemplate);
-remote.Menu.setApplicationMenu(menu);
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Setting from './views/setting/Setting';
 
 const App = () => {
   return (
     <>
-      <Home />
-      <BackendHandler />
+      {/* router */}
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/setting" element={<Setting />} />
+        </Routes>
+
+        {/* backend handler */}
+        <BackendHandler />
+      </BrowserRouter>
     </>
   );
 };

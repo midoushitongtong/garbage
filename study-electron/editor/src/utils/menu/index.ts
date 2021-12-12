@@ -1,3 +1,5 @@
+import electron from 'electron';
+
 const remote = require('@electron/remote');
 
 export const menuTemplate: any[] = [
@@ -8,28 +10,28 @@ export const menuTemplate: any[] = [
         label: '新建',
         accelerator: 'CmdOrCtrl+N',
         click: (menuItme: any, browserWindow: any, event: any) => {
-          browserWindow.webContents.emit('create-new-file');
+          electron.ipcRenderer.emit('create-new-file');
         },
       },
       {
         label: '保存',
         accelerator: 'CmdOrCtrl+S',
         click: (menuItme: any, browserWindow: any, event: any) => {
-          browserWindow.webContents.emit('save-edit-file');
+          electron.ipcRenderer.emit('save-edit-file');
         },
       },
       {
         label: '搜索',
         accelerator: 'CmdOrCtrl+F',
         click: (menuItme: any, browserWindow: any, event: any) => {
-          browserWindow.webContents.emit('search-file');
+          electron.ipcRenderer.emit('search-file');
         },
       },
       {
         label: '导入',
         accelerator: 'CmdOrCtrl+O',
         click: (menuItme: any, browserWindow: any, event: any) => {
-          browserWindow.webContents.emit('import-file');
+          electron.ipcRenderer.emit('import-file');
         },
       },
     ],
@@ -154,7 +156,7 @@ if (process.platform === 'darwin') {
         label: '设置',
         accelerator: 'Command+,',
         click: (menuItme: any, browserWindow: any, event: any) => {
-          browserWindow.webContents.emit('open-setting-window');
+          electron.ipcRenderer.emit('open-setting-window');
         },
       },
       {
@@ -191,7 +193,7 @@ if (process.platform === 'darwin') {
     label: '设置',
     accelerator: 'Ctrl+,',
     click: (menuItme: any, browserWindow: any, event: any) => {
-      browserWindow.webContents.emit('open-setting-window');
+      electron.ipcRenderer.emit('open-setting-window');
     },
   });
 }

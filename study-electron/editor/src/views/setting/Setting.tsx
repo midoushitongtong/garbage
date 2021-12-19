@@ -10,7 +10,7 @@ import {
 import useEffectOnce from '../../hooks/useEffectOnce';
 import { notification } from 'antd';
 
-const remote = require('@electron/remote');
+const remote = window.require('@electron/remote');
 
 const Setting = () => {
   const [initDataLoading, setInitDataLoading] = React.useState(true);

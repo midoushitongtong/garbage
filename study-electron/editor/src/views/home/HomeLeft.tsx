@@ -19,7 +19,7 @@ import path from 'path';
 import { notification } from 'antd';
 import useWebContentsListener from '../../hooks/useWebContentsListener';
 
-const remote = require('@electron/remote');
+const remote = window.require('@electron/remote');
 
 // components props
 type Props = {

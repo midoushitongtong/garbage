@@ -3,7 +3,7 @@ import path from 'path';
 import { FileListItem } from '../../apis/file/types';
 import { AppConfig } from './types';
 
-const remote = require('@electron/remote');
+const remote = window.require('@electron/remote');
 
 /**
  * 本文件导出应用中所有对文件操作的 api

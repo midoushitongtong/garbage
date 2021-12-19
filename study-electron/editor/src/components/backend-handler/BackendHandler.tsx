@@ -4,7 +4,7 @@ import { menuTemplate } from '../../utils/menu';
 import React from 'react';
 import electron from 'electron';
 
-const remote = require('@electron/remote');
+const remote = window.require('@electron/remote');
 
 // 创建 setting window
 const createSettingWindow = () => {
@@ -48,6 +48,7 @@ const BackendHandler = () => {
 
   // 设置 app 菜单
   const setMenu = React.useCallback(() => {
+    // 只有在首页在设置 app 菜单
     if (location.pathname === '/') {
       const menu = remote.Menu.buildFromTemplate(menuTemplate);
       remote.Menu.setApplicationMenu(menu);

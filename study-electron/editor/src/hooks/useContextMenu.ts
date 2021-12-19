@@ -1,6 +1,6 @@
 import React from 'react';
 
-const remote = require('@electron/remote');
+const remote = window.require('@electron/remote');
 
 /**
  * context menu

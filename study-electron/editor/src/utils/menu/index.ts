@@ -1,6 +1,6 @@
 import electron from 'electron';
 
-const remote = require('@electron/remote');
+const remote = window.require('@electron/remote');
 
 export const menuTemplate: any[] = [
   {

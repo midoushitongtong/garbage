@@ -20,7 +20,7 @@ const App = () => {
     try {
       const result = await qiniuManage.uploadFile(
         'chrome-icon.png',
-        path.join(remote.app.getAppPath(), '../', 'src/assets/images/chrome-icon.png')
+        path.join(remote.app.getAppPath(), '..', 'src', 'assets', 'images', 'chrome-icon.png')
       );
       console.log(result);
     } catch (error) {
@@ -30,7 +30,7 @@ const App = () => {
     try {
       const result4 = await qiniuManage.downloadFile(
         'chrome-icon.png',
-        path.join(remote.app.getAppPath(), '../', 'src/assets/images/chrome-icon-copy.png')
+        path.join(remote.app.getAppPath(), '..', 'src', 'assets', 'images', 'chrome-icon-copy.png')
       );
 
       console.log(result4);

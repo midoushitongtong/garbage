@@ -246,16 +246,8 @@ export const saveAppConfigToStore = async (appConfig: Partial<AppConfig>) => {
   const userDataSaveLocation = await getUserDataSaveLocation();
   // 文件列表保存路径
   const filePath = path.join(userDataSaveLocation, 'appConfig.json');
-  // 先拿到当前文件
-  const currentAppConfig = await getAppConfigFromStore();
   // 保存文件
-  await writeFile(
-    filePath,
-    JSON.stringify({
-      ...currentAppConfig,
-      ...appConfig,
-    })
-  );
+  await writeFile(filePath, JSON.stringify(appConfig));
 
   console.log(`app 配置已保存: ${filePath}`);
 };

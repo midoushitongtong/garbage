@@ -46,8 +46,9 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "electron": "electron ./electron/mainWindow",
-    "dev": "concurrently \"yarn start\" \"wait-on http://localhost:5000 && yarn electron\"",
+    "electron": "electron ./electron/main.js",
+    "watch:electron": "nodemon --watch ./electron/main.js --exec \"yarn electron\"",
+    "dev": "concurrently \"yarn start\" \"wait-on http://localhost:5000 && yarn watch:electron\"",
     "prettier": "prettier --write \"**/*.{ts,tsx,.js,.jsx}\"",
     "eslint": "eslint --fix \"**/*.{ts,tsx,.js,.jsx}\"",
     "typescript": "tsc --noEmit"
@@ -71,6 +72,7 @@
     "cross-env": "^7.0.3",
     "eslint-plugin-prettier": "^4.0.0",
     "node-sass": "^6.0.1",
+    "nodemon": "^2.0.15",
     "prettier": "^2.4.1",
     "wait-on": "^6.0.0"
   }

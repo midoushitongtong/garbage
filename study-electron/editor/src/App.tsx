@@ -6,6 +6,7 @@ import Setting from './views/setting/Setting';
 import useEffectOnce from './hooks/useEffectOnce';
 import { QiniuManage } from './utils/qin-niu';
 import path from 'path';
+import { notification } from 'antd';
 
 const remote = window.require('@electron/remote');
 
@@ -25,6 +26,12 @@ const App = () => {
       console.log(result);
     } catch (error) {
       console.log(error);
+
+      notification.error({
+        message: '上传文件失败',
+        description: JSON.stringify(error),
+        duration: 3,
+      });
     }
 
     try {
@@ -36,6 +43,12 @@ const App = () => {
       console.log(result4);
     } catch (error) {
       console.log(error);
+
+      notification.error({
+        message: '下载文件失败',
+        description: JSON.stringify(error),
+        duration: 3,
+      });
     }
 
     // try {
@@ -43,6 +56,11 @@ const App = () => {
     //   console.log(result2);
     // } catch (error) {
     //   console.log(error);
+    //   notification.error({
+    //     message: '获取文件下载地址失败',
+    //     description: JSON.stringify(error),
+    //     duration: 3,
+    //   });
     // }
 
     // try {
@@ -50,6 +68,11 @@ const App = () => {
     //   console.log(result3);
     // } catch (error) {
     //   console.log(error);
+    //   notification.error({
+    //     message: '删除文件失败',
+    //     description: JSON.stringify(error),
+    //     duration: 3,
+    //   });
     // }
   };
 

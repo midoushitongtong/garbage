@@ -13,7 +13,7 @@ import {
   getFileFromStore,
   checkFileExistsFromStore,
   readFile,
-  getIsAutoSyncToQinNiu,
+  getQinNiuConfig,
   getFilePathFromStore,
 } from '../../utils/file';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,6 +34,8 @@ type Props = {
   onChangeActiveFileId: (activeFileId: string) => void;
   onChangeOpenFileIdList: (openFileIdList: string[]) => void;
   createNewFile: () => void;
+  uploadFileToQinNiu: (fileListItem: FileListItem) => void;
+  deleteFileToQinNiu: (fileListItem: FileListItem) => void;
 };
 
 const HomeLeft = (props: Props) => {
@@ -45,6 +47,8 @@ const HomeLeft = (props: Props) => {
     onChangeActiveFileId,
     onChangeOpenFileIdList,
     createNewFile,
+    uploadFileToQinNiu,
+    deleteFileToQinNiu,
   } = props;
 
   // search keyword
@@ -79,9 +83,9 @@ const HomeLeft = (props: Props) => {
           isLoaded: true,
         };
 
-        // 是否自动同步到七牛云
-        const isAutoSyncToQinNiu = await getIsAutoSyncToQinNiu();
-        if (isAutoSyncToQinNiu && fileListItem.fileKey) {
+        // 七牛云配置
+        const qinNiuConfig = await getQinNiuConfig();
+        if (qinNiuConfig.qinNiuIsAutoSync && qinNiuConfig.qinNiuIsConfig && fileListItem.fileKey) {
           // 已开启同步, 读取服务器文件
           const qinNiuManage = await createQinNiuManageWithStore();
           try {
@@ -120,7 +124,7 @@ const HomeLeft = (props: Props) => {
           return item;
         });
         onChangeFileList(newFileList);
-        saveFileListToStore(newFileList);
+        await saveFileListToStore(newFileList);
 
         // 隐藏 loading
         electron.ipcRenderer.emit('toggle-loading', false);
@@ -158,6 +162,12 @@ const HomeLeft = (props: Props) => {
             // 保存文件列表
             await saveFileListToStore(newFileList);
             onChangeFileList(newFileList);
+            // 云同步
+            // 七牛云配置
+            const qinNiuConfig = await getQinNiuConfig();
+            if (qinNiuConfig.qinNiuIsAutoSync) {
+              await uploadFileToQinNiu(fileListItem);
+            }
           } else {
             console.log(`未找到旧文件, id: ${fileListItem.id}`);
           }
@@ -166,7 +176,7 @@ const HomeLeft = (props: Props) => {
         console.log(error);
       }
     },
-    [fileList, onChangeFileList]
+    [fileList, onChangeFileList, uploadFileToQinNiu]
   );
 
   // handle file delete
@@ -182,13 +192,19 @@ const HomeLeft = (props: Props) => {
           await deleteFileToStore(fileListItem);
           // 保存文件列表
           await saveFileListToStore(newFileList);
+          // 云同步
+          // 七牛云配置
+          const qinNiuConfig = await getQinNiuConfig();
+          if (qinNiuConfig.qinNiuIsAutoSync) {
+            await deleteFileToQinNiu(fileListItem);
+          }
         }
 
         onChangeFileList(newFileList);
         closeTab(id);
       }
     },
-    [closeTab, fileList, onChangeFileList]
+    [closeTab, deleteFileToQinNiu, fileList, onChangeFileList]
   );
 
   // 导入文件

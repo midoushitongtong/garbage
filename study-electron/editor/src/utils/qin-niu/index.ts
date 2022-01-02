@@ -137,6 +137,13 @@ export const createQinNiuManage = ({
     });
   };
 
+  // 获取文件列表
+  const getFileList = async () => {
+    return new Promise<any>((resolve, reject) => {
+      bucketManager.listPrefix(bucketName, {}, handleCallback(resolve, reject));
+    });
+  };
+
   return {
     uploadFile,
     generateDownloadLink,
@@ -144,6 +151,7 @@ export const createQinNiuManage = ({
     getBucketDomain,
     downloadFile,
     getFileStat,
+    getFileList,
   };
 };
 

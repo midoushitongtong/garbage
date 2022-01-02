@@ -104,10 +104,10 @@ export const getMainWindowMenuTemplate = async () => {
               ...appConfig, // 还原其他配置, 不然其他配置会被清空
               qinNiu: {
                 ...appConfig.qinNiu, // 还原其他配置, 不然其他配置会被清空
-                isAutoSync: !qinNiuIsAutoSync,
+                isAutoSync: !appConfig.qinNiu?.isAutoSync,
               },
             };
-            saveAppConfigToStore(newAppConfig);
+            await saveAppConfigToStore(newAppConfig);
           },
         },
         {
@@ -119,9 +119,11 @@ export const getMainWindowMenuTemplate = async () => {
           },
         },
         {
-          label: '从云端下载到本地',
+          label: '从云端下载到本地 (注意: 此操作会覆盖当前的文件列表)',
           enabled: qinNiuIsConfig,
-          click: (menuItme: any, browserWindow: any, event: any) => {},
+          click: (menuItme: any, browserWindow: any, event: any) => {
+            electron.ipcRenderer.emit('qin-niu-download-all-file');
+          },
         },
       ],
     },

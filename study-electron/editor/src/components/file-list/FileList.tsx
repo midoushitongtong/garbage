@@ -7,7 +7,7 @@ import { FileListItem } from '../../apis/file/types';
 import { Form, ListGroup } from 'react-bootstrap';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKeyPress from '../../hooks/useKeyPress';
-import { checkFileExistsFromStore } from '../../utils/file';
+import { checkFileExistsFromStore, deleteFileToStore } from '../../utils/file';
 import { notification } from 'antd';
 import useContextMenu from '../../hooks/useContextMenu';
 import { getParentNode } from '../../utils/dom';
@@ -114,7 +114,7 @@ const FileList = (props: Props) => {
     }
 
     if (editFileListItem) {
-      const exists = await checkFileExistsFromStore(fileTitle);
+      const exists = fileList.find((item) => item.title === fileTitle);
 
       if (exists) {
         notification.error({
@@ -124,6 +124,14 @@ const FileList = (props: Props) => {
         });
 
         return;
+      } else {
+        // 如果文件已经存在, 先将其删除
+        if (editFileListItem.isNew && (await checkFileExistsFromStore(fileTitle))) {
+          await deleteFileToStore({
+            ...editFileListItem,
+            title: fileTitle,
+          });
+        }
       }
 
       onFileSaveEdit(
@@ -140,7 +148,7 @@ const FileList = (props: Props) => {
 
       closeEdit();
     }
-  }, [closeEdit, editFileListItem, fileTitle, onFileSaveEdit]);
+  }, [closeEdit, editFileListItem, fileList, fileTitle, onFileSaveEdit]);
 
   // 每次切换到修改状态的时候: 光标 focus 到 input 上
   React.useEffect(() => {

@@ -155,9 +155,9 @@ export const renameFileToStore = async (
   newFileListItem: FileListItem
 ) => {
   // 旧文件路径
-  const oldFilePath = await getFilePathFromStore(`${oldFileListItem.title}.md`);
+  const oldFilePath = await getFilePathFromStore(oldFileListItem.title);
   // 新文件路径
-  const newFilePath = await getFilePathFromStore(`${newFileListItem.title}.md`);
+  const newFilePath = await getFilePathFromStore(newFileListItem.title);
 
   if (!fs.existsSync(oldFilePath)) {
     console.log(`未找到旧文件: ${oldFilePath}`);
@@ -172,7 +172,7 @@ export const renameFileToStore = async (
 // 删除文件到 store
 export const deleteFileToStore = async (fileListItem: FileListItem) => {
   // 文件路径
-  const filePath = await getFilePathFromStore(`${fileListItem.title}.md`);
+  const filePath = await getFilePathFromStore(fileListItem.title);
 
   if (!fs.existsSync(filePath)) {
     console.log(`未找到需要删除的文件: ${filePath}`);
@@ -246,7 +246,7 @@ export const saveAppConfigToStore = async (appConfig: Partial<AppConfig>) => {
 };
 
 // 是否自动同步到七牛云
-export const getIsAutoSyncToQinNiu = async () => {
+export const getQinNiuConfig = async () => {
   // app 配置
   const appConfig = await getAppConfigFromStore();
   // 是否配置了七牛云相关参数
@@ -255,5 +255,8 @@ export const getIsAutoSyncToQinNiu = async () => {
   // 是否开启了七牛云自动同步
   const qinNiuIsAutoSync = appConfig.qinNiu?.isAutoSync;
 
-  return qinNiuIsConfig && qinNiuIsAutoSync;
+  return {
+    qinNiuIsConfig,
+    qinNiuIsAutoSync,
+  };
 };

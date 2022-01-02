@@ -4,6 +4,7 @@ import { FileListItem } from '../../apis/file/types';
 import FileTabList from '../../components/file-tab-list/FileTabList';
 import './HomeRight.scss';
 import FileEditor from '../../components/file-editor/FileEditor';
+import { timestampToString } from '../../utils/date';
 
 // component props
 type Props = {
@@ -59,6 +60,7 @@ const HomeRight = (props: Props) => {
       });
 
       onChangeFileList(newFileList);
+
       if (!unsaveFileIdList.includes(id)) {
         onChangeUnsaveFileIdList([...unsaveFileIdList, id]);
       }
@@ -90,6 +92,15 @@ const HomeRight = (props: Props) => {
               handleFileBodyChange(activeFileId, value || '');
             }}
           />
+
+          {/* 同步提示 */}
+          {activeFile.isSynced && activeFile.lastSyncedAt && (
+            <>
+              <div className="sync-tooltip-text">
+                文件已同步, 上次同步时间: {timestampToString(activeFile.lastSyncedAt)}
+              </div>
+            </>
+          )}
         </>
       ) : (
         <>

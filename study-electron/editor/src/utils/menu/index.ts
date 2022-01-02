@@ -114,7 +114,9 @@ export const getMainWindowMenuTemplate = async () => {
           label: '全部同步到云端',
           enabled: qinNiuIsConfig,
           accelerator: 'CmdOrCtrl+F',
-          click: (menuItme: any, browserWindow: any, event: any) => {},
+          click: (menuItme: any, browserWindow: any, event: any) => {
+            electron.ipcRenderer.emit('qin-niu-upload-all-file');
+          },
         },
         {
           label: '从云端下载到本地',

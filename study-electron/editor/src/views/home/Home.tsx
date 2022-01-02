@@ -6,8 +6,17 @@ import './Home.scss';
 import HomeLeft from './HomeLeft';
 import HomeRight from './HomeRight';
 import { v4 as uuidv4 } from 'uuid';
-import { getFileListFromStore, saveFileToStore } from '../../utils/file';
+import {
+  getFileListFromStore,
+  getFilePathFromStore,
+  getIsAutoSyncToQinNiu,
+  saveFileListToStore,
+  saveFileToStore,
+} from '../../utils/file';
 import useWebContentsListener from '../../hooks/useWebContentsListener';
+import { createQinNiuManageWithStore } from '../../utils/qin-niu';
+import { notification } from 'antd';
+import electron from 'electron';
 
 const Home = () => {
   const [initDataLoading, setInitDataLoading] = React.useState(true);
@@ -23,6 +32,80 @@ const Home = () => {
   const activeFile = React.useMemo(() => {
     return fileList.find((item) => item.id === activeFileId);
   }, [activeFileId, fileList]);
+
+  useWebContentsListener({
+    'qin-niu-upload-all-file': async () => {
+      // 显示 loading
+      electron.ipcRenderer.emit('toggle-loading', true);
+
+      const qinNiuManage = await createQinNiuManageWithStore();
+      const fileList = await getFileListFromStore();
+
+      // 新的文件列表 (临时的数组, 数组内容会被修改)
+      let newFileList = fileList;
+
+      try {
+        const uploadPromiseArr = fileList.map((item) => {
+          return new Promise(async (resolve, reject) => {
+            // 删除旧文件
+            if (item.fileKey) {
+              try {
+                await qinNiuManage.deleteFile(item.fileKey);
+              } catch (error) {
+                // 文件删除失败, 不需要处理
+              }
+            }
+
+            // 上传新文件
+            try {
+              const fileKey = `${item.title}_${new Date().getTime()}.md`;
+              const result = await qinNiuManage.uploadFile(
+                fileKey,
+                await getFilePathFromStore(item.title)
+              );
+              newFileList = newFileList.map((item2) => {
+                if (item2.id === item.id) {
+                  return {
+                    ...item2,
+                    fileKey,
+                    isSynced: true,
+                    lastSyncedAt: new Date().getTime(),
+                  };
+                }
+                return item2;
+              });
+              resolve(result);
+            } catch (error) {
+              reject(error);
+            }
+          });
+        });
+
+        const result = await Promise.all(uploadPromiseArr);
+
+        setFileList(newFileList);
+        saveFileListToStore(newFileList);
+
+        notification.success({
+          message: '云同步 - 文件已同步完成',
+          description: `共同步 ${result.length} 个文件`,
+          duration: 3,
+        });
+      } catch (error) {
+        console.log(error);
+
+        notification.error({
+          message: '云同步 - 文件同步失败, 请检查七牛云参数是否正确!',
+          description: JSON.stringify(error),
+          // 永久显示不会自动关闭
+          duration: 0,
+        });
+      } finally {
+        // 隐藏 loading
+        electron.ipcRenderer.emit('toggle-loading', false);
+      }
+    },
+  });
 
   // init data
   const initData = React.useCallback(async () => {
@@ -58,7 +141,7 @@ const Home = () => {
         id: newId,
         title: '',
         body: '# 请输出 Markdown',
-        createdAt: new Date().toISOString(),
+        createdAt: new Date().getTime(),
         isNew: true,
       },
     ];
@@ -72,12 +155,59 @@ const Home = () => {
       if (activeFile) {
         await saveFileToStore(activeFile);
 
-        setUnsaveFileIdList(unsaveFileIdList.filter((item) => item !== activeFile.id));
+        setUnsaveFileIdList((previous) => previous.filter((item) => item !== activeFile.id));
+
+        // 是否自动同步到七牛云
+        const isAutoSyncToQinNiu = await getIsAutoSyncToQinNiu();
+        if (isAutoSyncToQinNiu) {
+          // 同步文件到七牛云
+          const qinNiuManage = await createQinNiuManageWithStore();
+          try {
+            // 删除旧文件
+            if (activeFile.fileKey) {
+              try {
+                await qinNiuManage.deleteFile(activeFile.fileKey);
+              } catch (error) {
+                // 文件删除失败, 不需要处理
+              }
+            }
+            // 上传新文件
+            const fileKey = `${activeFile.title}_${new Date().getTime()}.md`;
+            await qinNiuManage.uploadFile(fileKey, await getFilePathFromStore(activeFile.title));
+
+            // 新的文件列表
+            const newFileList = fileList.map((item) => {
+              if (item.id === activeFile.id) {
+                return {
+                  ...item,
+                  fileKey,
+                  isSynced: true,
+                  lastSyncedAt: new Date().getTime(),
+                };
+              }
+
+              return item;
+            });
+            setFileList(newFileList);
+            saveFileListToStore(newFileList);
+
+            console.log(`云同步 - 已上传文件: ${activeFile.title}.md`);
+          } catch (error) {
+            console.log(error);
+
+            notification.error({
+              message: '云同步 - 上传文件失败, 请检查七牛云参数是否正确!',
+              description: JSON.stringify(error),
+              // 永久显示不会自动关闭
+              duration: 0,
+            });
+          }
+        }
       }
     } catch (error) {
       console.log(error);
     }
-  }, [activeFile, unsaveFileIdList]);
+  }, [activeFile, fileList]);
 
   useEffectOnce(() => {
     initData();

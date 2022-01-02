@@ -88,10 +88,8 @@ export const getFileListFromStore = async (): Promise<FileListItem[]> => {
 
 // 从 store 获取文件
 export const getFileFromStore = async (fileListItem: FileListItem) => {
-  // file save location
-  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(fileSaveLocation, `${fileListItem.title}.md`);
+  const filePath = await getFilePathFromStore(fileListItem.title);
 
   if (!fs.existsSync(filePath)) {
     console.log(`未找到文件: ${filePath}`);
@@ -115,10 +113,8 @@ export const getFilePathFromStore = async (title: string) => {
 
 // 从 store 判断文件是否已经存在
 export const checkFileExistsFromStore = async (title: string) => {
-  // file save location
-  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(fileSaveLocation, `${title}.md`);
+  const filePath = await getFilePathFromStore(title);
 
   return fs.existsSync(filePath);
 };
@@ -133,6 +129,9 @@ export const saveFileListToStore = async (fileList: FileListItem[]) => {
     id: item.id,
     title: item.title,
     createdAt: item.createdAt,
+    fileKey: item.fileKey,
+    isSynced: item.isSynced,
+    lastSyncedAt: item.lastSyncedAt,
   }));
   // 保存文件
   await writeFile(filePath, JSON.stringify(fileListWithStore));
@@ -142,10 +141,8 @@ export const saveFileListToStore = async (fileList: FileListItem[]) => {
 
 // 保存文件到 store
 export const saveFileToStore = async (fileListItem: FileListItem) => {
-  // file save location
-  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(fileSaveLocation, `${fileListItem.title}.md`);
+  const filePath = await getFilePathFromStore(fileListItem.title);
   // 保存文件
   await writeFile(filePath, fileListItem.body || '');
 
@@ -157,12 +154,10 @@ export const renameFileToStore = async (
   oldFileListItem: FileListItem,
   newFileListItem: FileListItem
 ) => {
-  // file save location
-  const fileSaveLocation = await getFileSaveLocation();
   // 旧文件路径
-  const oldFilePath = path.join(fileSaveLocation, `${oldFileListItem.title}.md`);
+  const oldFilePath = await getFilePathFromStore(`${oldFileListItem.title}.md`);
   // 新文件路径
-  const newFilePath = path.join(fileSaveLocation, `${newFileListItem.title}.md`);
+  const newFilePath = await getFilePathFromStore(`${newFileListItem.title}.md`);
 
   if (!fs.existsSync(oldFilePath)) {
     console.log(`未找到旧文件: ${oldFilePath}`);
@@ -176,10 +171,8 @@ export const renameFileToStore = async (
 
 // 删除文件到 store
 export const deleteFileToStore = async (fileListItem: FileListItem) => {
-  // file save location
-  const fileSaveLocation = await getFileSaveLocation();
   // 文件路径
-  const filePath = path.join(fileSaveLocation, `${fileListItem.title}.md`);
+  const filePath = await getFilePathFromStore(`${fileListItem.title}.md`);
 
   if (!fs.existsSync(filePath)) {
     console.log(`未找到需要删除的文件: ${filePath}`);
@@ -250,4 +243,17 @@ export const saveAppConfigToStore = async (appConfig: Partial<AppConfig>) => {
   await writeFile(filePath, JSON.stringify(appConfig));
 
   console.log(`app 配置已保存: ${filePath}`);
+};
+
+// 是否自动同步到七牛云
+export const getIsAutoSyncToQinNiu = async () => {
+  // app 配置
+  const appConfig = await getAppConfigFromStore();
+  // 是否配置了七牛云相关参数
+  const qinNiuIsConfig =
+    !!appConfig.qinNiu?.accessKey && appConfig.qinNiu?.secretKey && appConfig.qinNiu?.bucketName;
+  // 是否开启了七牛云自动同步
+  const qinNiuIsAutoSync = appConfig.qinNiu?.isAutoSync;
+
+  return qinNiuIsConfig && qinNiuIsAutoSync;
 };

@@ -13,11 +13,15 @@ import {
   getFileFromStore,
   checkFileExistsFromStore,
   readFile,
+  getIsAutoSyncToQinNiu,
+  getFilePathFromStore,
 } from '../../utils/file';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import { notification } from 'antd';
 import useWebContentsListener from '../../hooks/useWebContentsListener';
+import { createQinNiuManageWithStore } from '../../utils/qin-niu';
+import electron from 'electron';
 
 const remote = window.require('@electron/remote');
 
@@ -65,20 +69,61 @@ const HomeLeft = (props: Props) => {
 
       // 获取文件内容 (只获取一次, 已经获取过了就不需要再次获取)
       const fileListItem = fileList.find((item) => item.id === id);
-      if (fileListItem && !fileListItem.isLoad) {
-        const fileBody = await getFileFromStore(fileListItem);
-        onChangeFileList(
-          fileList.map((item) => {
-            if (item.id === id) {
-              return {
-                ...item,
-                body: fileBody,
-                isLoad: true, // 标记已经获取过了
-              };
+      if (fileListItem && !fileListItem.isLoaded) {
+        // 显示 loading
+        electron.ipcRenderer.emit('toggle-loading', true);
+
+        // 新的文件列表项 (临时的对象, 对象中的内容会被修改)
+        const newFileListiItem: FileListItem = {
+          ...fileListItem,
+          isLoaded: true,
+        };
+
+        // 是否自动同步到七牛云
+        const isAutoSyncToQinNiu = await getIsAutoSyncToQinNiu();
+        if (isAutoSyncToQinNiu && fileListItem.fileKey) {
+          // 已开启同步, 读取服务器文件
+          const qinNiuManage = await createQinNiuManageWithStore();
+          try {
+            const result = await qinNiuManage.getFileStat(fileListItem.fileKey);
+            const serverUpdatedTime = Math.round(result.putTime / 10000);
+            const localUpdatedTime = fileListItem.lastSyncedAt;
+            if (!localUpdatedTime || serverUpdatedTime > localUpdatedTime) {
+              // 服务器文件比本地的文件要新, 下载服务器文件到本地
+              await qinNiuManage.downloadFile(
+                fileListItem.fileKey,
+                await getFilePathFromStore(fileListItem.title)
+              );
+              // 更新文件为已同步
+              newFileListiItem.isSynced = true;
+              // 更新文件最新同步时间
+              newFileListiItem.lastSyncedAt = new Date().getTime();
+              console.log(`云同步 - 文件下载完成: ${fileListItem.title}.md`);
+            } else {
+              console.log(`云同步 - 服务器文件比本地文件旧无需更新: ${fileListItem.title}.md`);
             }
-            return item;
-          })
-        );
+          } catch (error) {
+            console.log(`云同步 - 此文件暂未同步到七牛云: ${fileListItem.title}`);
+          }
+        }
+
+        // 更新文件内容
+        newFileListiItem.body = await getFileFromStore(fileListItem);
+
+        // 新的文件列表
+        const newFileList = fileList.map((item) => {
+          if (item.id === id) {
+            return {
+              ...newFileListiItem,
+            };
+          }
+          return item;
+        });
+        onChangeFileList(newFileList);
+        saveFileListToStore(newFileList);
+
+        // 隐藏 loading
+        electron.ipcRenderer.emit('toggle-loading', false);
       }
     },
     [fileList, onChangeActiveFileId, onChangeFileList, onChangeOpenFileIdList, openFileIdList]
@@ -182,7 +227,7 @@ const HomeLeft = (props: Props) => {
               id: uuidv4(),
               title: path.basename(item, path.extname(item)),
               body: await readFile(item),
-              createdAt: new Date().toISOString(),
+              createdAt: new Date().getTime(),
             };
             importFileList.push(importFileListItem);
           }

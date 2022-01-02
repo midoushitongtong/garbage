@@ -1,16 +1,17 @@
 import axios from '../axios';
 import fs from 'fs';
+import { getAppConfigFromStore } from '../file';
 
 const qiniu = window.require('qiniu');
 
-export const QiniuManage = ({
+export const createQinNiuManage = ({
   accessKey,
   secretKey,
-  bucket,
+  bucketName,
 }: {
   accessKey: string;
   secretKey: string;
-  bucket: string;
+  bucketName: string;
 }) => {
   // 生成 mac
   const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
@@ -43,7 +44,7 @@ export const QiniuManage = ({
 
   // 获取 bucket 域名
   const getBucketDomain = () => {
-    const requestURL = `http://uc.qbox.me/v2/domains?tbl=${bucket}`;
+    const requestURL = `http://uc.qbox.me/v2/domains?tbl=${bucketName}`;
     const digest = qiniu.util.generateAccessToken(mac, requestURL);
     return new Promise((resolve, reject) => {
       qiniu.rpc.postWithoutForm(requestURL, digest, handleCallback(resolve, reject));
@@ -54,7 +55,7 @@ export const QiniuManage = ({
   const uploadFile = (key: string, localFilePath: string) => {
     // 生成 uploadToken
     const options = {
-      scope: bucket + ':' + key,
+      scope: bucketName + ':' + key,
     };
     const putPolicy = new qiniu.rs.PutPolicy(options);
     const uploadToken = putPolicy.uploadToken(mac);
@@ -62,7 +63,7 @@ export const QiniuManage = ({
     const formUploader = new qiniu.form_up.FormUploader(config);
     const putExtra = new qiniu.form_up.PutExtra();
 
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<any>(async (resolve, reject) => {
       // 执行文件上传
       formUploader.putFile(
         uploadToken,
@@ -87,7 +88,8 @@ export const QiniuManage = ({
           ? domainList[0]
           : `http://${domainList[0]}`;
         // 公开空间访问链接
-        const publicDownloadUrl = bucketManager.publicDownloadUrl(publicBucketDomain, key);
+        let publicDownloadUrl = bucketManager.publicDownloadUrl(publicBucketDomain, key);
+        publicDownloadUrl = `${publicDownloadUrl}?t=${Math.random()}`;
         resolve(publicDownloadUrl);
       } else {
         reject('域名未找到, 请检查存储空间是否已经过去');
@@ -99,7 +101,7 @@ export const QiniuManage = ({
   const deleteFile = (key: string) => {
     return new Promise<any>((resolve, reject) => {
       // 执行文件删除
-      bucketManager.delete(bucket, key, handleCallback(resolve, reject));
+      bucketManager.delete(bucketName, key, handleCallback(resolve, reject));
     });
   };
 
@@ -128,11 +130,30 @@ export const QiniuManage = ({
     });
   };
 
+  // 获取文件信息
+  const getFileStat = async (key: string) => {
+    return new Promise<any>((resolve, reject) => {
+      bucketManager.stat(bucketName, key, handleCallback(resolve, reject));
+    });
+  };
+
   return {
     uploadFile,
     generateDownloadLink,
     deleteFile,
     getBucketDomain,
     downloadFile,
+    getFileStat,
   };
+};
+
+export const createQinNiuManageWithStore = async () => {
+  const appConfig = await getAppConfigFromStore();
+  const qiniuManage = createQinNiuManage({
+    accessKey: appConfig.qinNiu?.accessKey as string,
+    secretKey: appConfig.qinNiu?.secretKey as string,
+    bucketName: appConfig.qinNiu?.bucketName as string,
+  });
+
+  return qiniuManage;
 };

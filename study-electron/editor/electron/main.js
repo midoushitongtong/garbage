@@ -89,10 +89,6 @@ const createSettingWindow = () => {
   settingWindow.webContents.openDevTools();
   // 加载 url
   settingWindow.loadURL(url);
-  // 渲染进程准备完成后显示窗口
-  settingWindow.once('ready-to-show', () => {
-    settingWindow.show();
-  });
   // 移除菜单
   settingWindow.removeMenu();
   // 保存当前打开的 window
@@ -103,6 +99,11 @@ const createSettingWindow = () => {
       value: settingWindow,
     },
   ];
+
+  // 渲染进程准备完成后显示窗口
+  settingWindow.once('ready-to-show', () => {
+    settingWindow.show();
+  });
 
   settingWindow.on('close', () => {
     // 移除当前打开的 window

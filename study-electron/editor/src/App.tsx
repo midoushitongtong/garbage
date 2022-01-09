@@ -2,7 +2,7 @@ import React from 'react';
 import './App.scss';
 import Home from './views/home/Home';
 import BackendHandler from './components/backend-handler/BackendHandler';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 import Setting from './views/setting/Setting';
 import useWebContentsListener from './hooks/useWebContentsListener';
 import Loader from './components/Loader/Loader';
@@ -19,7 +19,7 @@ const App = () => {
   return (
     <>
       {/* router */}
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route index element={<Home />} />
           <Route path="/setting" element={<Setting />} />
@@ -27,7 +27,7 @@ const App = () => {
 
         {/* backend handler */}
         <BackendHandler />
-      </BrowserRouter>
+      </HashRouter>
 
       {loading && (
         <div className="loading-container">

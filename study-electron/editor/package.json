@@ -1,10 +1,16 @@
 {
-  "name": "editor",
-  "version": "0.1.0",
   "private": true,
+  "name": "editor",
+  "description": "this is editor application",
+  "author": {
+    "name": "Editor",
+    "email": "editor@editor.com"
+  },
+  "version": "0.1.0",
   "engines": {
     "node": ">=16.0.0"
   },
+  "homepage": "./",
   "dependencies": {
     "@craco/craco": "^6.4.2",
     "@electron/remote": "^2.0.1",
@@ -27,7 +33,6 @@
     "classnames": "^2.3.1",
     "craco-less": "^1.20.0",
     "easymde": "^2.15.0",
-    "electron": "^15.3.0",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
     "qiniu": "^7.4.0",
@@ -46,12 +51,14 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "electron": "electron ./electron/main.js",
-    "watch:electron": "nodemon --watch ./electron/main.js --exec \"yarn electron\"",
-    "dev": "concurrently \"yarn start\" \"wait-on http://localhost:5000 && yarn watch:electron\"",
     "prettier": "prettier --write \"**/*.{ts,tsx,.js,.jsx}\"",
     "eslint": "eslint --fix \"**/*.{ts,tsx,.js,.jsx}\"",
-    "typescript": "tsc --noEmit"
+    "typescript": "tsc --noEmit",
+    "electron": "electron ./electron/main.js",
+    "electron:watch": "nodemon --watch ./electron/main.js --exec \"yarn electron\"",
+    "electron-dev": "concurrently \"yarn start\" \"wait-on http://localhost:5000 && yarn electron:watch\"",
+    "electron-pack": "electron-builder --dir",
+    "electron-dist": "electron-builder"
   },
   "browserslist": {
     "production": [
@@ -70,10 +77,62 @@
     "babel-plugin-import": "^1.13.3",
     "concurrently": "^6.3.0",
     "cross-env": "^7.0.3",
+    "electron": "^16.0.6",
+    "electron-builder": "^22.14.5",
     "eslint-plugin-prettier": "^4.0.0",
     "node-sass": "^6.0.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.4.1",
     "wait-on": "^6.0.0"
+  },
+  "build": {
+    "appId": "editor",
+    "productName": "云文档",
+    "copyright": "Copyright © 2022 editor",
+    "extends": null,
+    "extraMetadata": {
+      "main": "./electron/main.js"
+    },
+    "files": [
+      "./build/**/*",
+      "./electron/main.js"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "dmg": {
+      "background": "./src/assets/appdmg.png",
+      "icon": "./src/assets/icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 380,
+          "y": 280,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "./src/assets/icon.ico",
+      "artifactName": "${productName}-Web-Setup-${version}.${ext}",
+      "publisherName": "Eidtor"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": false
+    }
   }
 }

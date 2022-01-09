@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 // 初始化 remote api
 require('@electron/remote/main').initialize();
+const path = require('path');
 
 // 当前打开的 window 列表
 // key: window 名称
@@ -16,7 +17,9 @@ const sendEventToBrowserWindowList = (name) => {
 // 创建 main window
 const createMainWindow = () => {
   // 根据 isPackaged 区分生产/开发环境 url
-  const url = app.isPackaged ? 'TODO' : 'http://localhost:5000';
+  const url = app.isPackaged
+    ? path.join(__dirname, '..', 'build', 'index.html')
+    : 'http://localhost:5000';
 
   // 创建渲染进程
   const mainWindow = new BrowserWindow({
@@ -66,7 +69,9 @@ const createMainWindow = () => {
 // 创建 setting window
 const createSettingWindow = () => {
   // 根据 isPackaged 区分生产/开发环境 url
-  const url = app.isPackaged ? 'TODO' : 'http://localhost:5000/setting';
+  const url = app.isPackaged
+    ? path.join(__dirname, '..', 'build', 'index.html')
+    : 'http://localhost:5000';
 
   // 创建渲染进程
   const settingWindow = new BrowserWindow({
@@ -88,7 +93,7 @@ const createSettingWindow = () => {
   // 显示开发控制台
   settingWindow.webContents.openDevTools();
   // 加载 url
-  settingWindow.loadURL(url);
+  settingWindow.loadURL(url + '#/setting');
   // 移除菜单
   settingWindow.removeMenu();
   // 保存当前打开的 window

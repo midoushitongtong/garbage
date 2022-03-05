@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css" />
+    <script src="./js/index.js" type="module"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- video -->
+      <div class="video-wrapper">
+        <canvas class="danmu-canvas"></canvas>
+        <video preload="auto" class="danmu-video" controls muted>
+          <source src="./video/test.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <!-- action -->
+      <div class="action-container">
+        <input type="text" class="danmu-text" />
+        <button class="danmu-send">发送弹幕</button>
+        <input type="color" class="danmu-color" value="#ffffff" />
+      </div>
+    </div>
+  </body>
+</html>

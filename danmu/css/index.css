@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.video-wrapper {
+  position: relative;
+}
+
+.video-wrapper .danmu-video {
+  width: 100%;
+}
+
+.video-wrapper .danmu-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.action-container {
+  display: flex;
+  margin: 10px;
+  height: 38px;
+}
+
+.action-container .danmu-text {
+  flex: 1;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.action-container .danmu-text:focus {
+  border-color: #aaa;
+}
+
+.action-container .danmu-send {
+  margin: 0 10px;
+  flex: none;
+  outline: none;
+  height: 100%;
+  padding: 5px 10px;
+  border: 2px solid #1890ff;
+  cursor: pointer;
+  background-color: #1890ff;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.action-container .danmu-send:hover {
+  background-color: #1169db;
+  border-color: #1169db;
+}
+
+.action-container .danmu-color {
+  flex: none;
+  height: 100%;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  border-radius: 5px;
+}

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>羊了个羊</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .main {
+        position: relative;
+        margin: 0 auto;
+      }
+
+      .item {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: top 0.3s, left 0.3s, transform 0.3s;
+        z-index: 1;
+      }
+
+      .item .item-inner {
+        position: relative;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .item .item-inner::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transition: background-color 0.3s;
+      }
+
+      .item.disabled .item-inner::after {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      .item.in-move-list {
+        z-index: 2;
+      }
+
+      .move-list {
+        position: relative;
+        border: 1px solid #ddd;
+        background-color: #ddd;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main"></div>
+    <div class="move-list"></div>
+  </body>
+
+  <script>
+    const itemList = [
+      { name: '虎', color: '#ff1100' },
+      { name: '兔', color: '#ff8800' },
+      { name: '牛', color: 'green' },
+      { name: '羊', color: '#779922' },
+      { name: '蛇', color: 'blue' },
+      { name: '鼠', color: '#335577' },
+    ];
+    // html element
+    const mainElement = document.querySelector('.main');
+    // html element
+    const moveListElement = document.querySelector('.move-list');
+    // item 大小
+    const itemSize = 50;
+    // 行
+    const rowCount = 10;
+    // 列
+    const colCount = 10;
+    // 多少个为一组
+    const ontGroupCount = 3;
+    // 一共有多少组
+    const groupCount = 6;
+    // 多少层
+    const layerCount = 5;
+    // 卡槽能装几个
+    const moveListCount = 10;
+    // item list html
+    const itemListHtml = [];
+    // render item list
+    renderItemList = [];
+    for (let i = 0; i < itemList.length * ontGroupCount * groupCount; i++) {
+      renderItemList.push(itemList[i % itemList.length]);
+    }
+    renderItemList = renderItemList.sort(() => Math.random() - 0.5);
+
+    // 第一步：渲染卡片
+    for (let i = 0; i < layerCount; i++) {
+      for (let j = 0; j < rowCount; j++) {
+        for (let k = 0; k < colCount; k++) {
+          // 偏移量, 让格子看上去不是整齐的
+          let offset = i % 2 === 0 ? itemSize / 2 : 0;
+          const renderItem = Math.random() > 0.7 && renderItemList.pop();
+          if (renderItem) {
+            itemListHtml.push(`
+               <div
+                 class="item"
+                 data-layout="${i}-${j}-${k}"
+                 style="width: ${itemSize}px; height: ${itemSize}px; top: ${
+              itemSize * j + offset
+            }px; left: ${itemSize * k + offset}px;">
+                 <div class="item-inner" style="width: ${itemSize - 10}px; height: ${
+              itemSize - 10
+            }px; background: ${renderItem.color}">${renderItem.name}</div>
+               </div>
+             `);
+          }
+        }
+      }
+    }
+
+    mainElement.innerHTML = itemListHtml.join('');
+    const itemElementList = [...mainElement.querySelectorAll('.item')].reverse();
+    mainElement.style.width = `${itemSize * rowCount + itemSize / 2}px`;
+    mainElement.style.height = `${itemSize * colCount + itemSize / 2 + 100}px`;
+    moveListElement.style.width = `${itemSize * moveListCount}px`;
+    moveListElement.style.height = `${itemSize}px`;
+
+    // 第二步：计算被遮住的卡片, 并标注暗色
+    const checkItemDisabled = () => {
+      const beforeItemElementList = [];
+      for (let i = 0; i < itemElementList.length; i++) {
+        const a = itemElementList[i];
+        for (let j = 0; j < beforeItemElementList.length; j++) {
+          const b = beforeItemElementList[j];
+
+          const l1 = a.offsetLeft;
+          const t1 = a.offsetTop;
+          const r1 = l1 + a.offsetWidth;
+          const b1 = t1 + a.offsetHeight;
+
+          const l2 = b.offsetLeft;
+          const t2 = b.offsetTop;
+          const r2 = l2 + b.offsetWidth;
+          const b2 = t2 + b.offsetHeight;
+
+          if (r2 <= l1 || r1 <= l2 || b2 <= t1 || b1 <= t2) {
+            // 未重叠
+            a.classList.remove('disabled');
+          } else {
+            // 已经移动的 item 不需要禁用
+            if (!a.classList.contains('in-move-list')) {
+              a.classList.add('disabled');
+            }
+            break;
+          }
+        }
+
+        beforeItemElementList.push(itemElementList[i]);
+      }
+    };
+    checkItemDisabled();
+
+    // 第三步：点击卡片继续消除操作
+    let canMove = true;
+    /**
+     * @param {HTMLDivElement} itemElement
+     */
+    const moveItem = (itemElement) => {
+      if (itemElement.classList.contains('in-move-list')) {
+        return;
+      }
+      if (itemElement.classList.contains('disabled')) {
+        return;
+      }
+      if (!canMove) {
+        return;
+      }
+      canMove = false;
+
+      // 已经移动的 item
+      const inMoveListItemElementList = [...mainElement.querySelectorAll('.item.in-move-list')];
+      // 已经移动的 item (未消除)
+      const inMoveListNotDoneItemElementList = [
+        ...mainElement.querySelectorAll('.item.in-move-list:not(.done)'),
+      ];
+
+      const offsetTop = moveListElement.offsetTop - mainElement.offsetTop;
+      const offsetLeft =
+        moveListElement.offsetLeft -
+        mainElement.offsetLeft +
+        inMoveListNotDoneItemElementList.length * itemSize;
+
+      itemElement.style.top = `${offsetTop}px`;
+      itemElement.style.left = `${offsetLeft}px`;
+      itemElement.classList.add('in-move-list');
+      itemElement.dataset.inMoveListIndex = inMoveListItemElementList.length;
+    };
+
+    let transitionEndEventCallCount = 0;
+    const handleMoveItemEnd = async (e) => {
+      /** @type {HTMLDivElement} **/
+      const itemElement = e.target;
+      transitionEndEventCallCount += 1;
+      // 有 top 和 left 两个 transition 所以需要等待 2 个都结束
+      if (transitionEndEventCallCount === 2) {
+        // 处理动画结束
+        itemElement.removeEventListener('transitionend', handleMoveItemEnd);
+        const inMoveListNotDoneItemElementList = [
+          ...mainElement.querySelectorAll('.item.in-move-list:not(.done)'),
+        ];
+        const sameItemElementList = inMoveListNotDoneItemElementList.filter(
+          (item) => item.innerHTML === itemElement.innerHTML
+        );
+
+        // 满 3 个消除
+        if (sameItemElementList.length === ontGroupCount) {
+          await Promise.all(
+            sameItemElementList.map((item) => {
+              return new Promise((resolve) => {
+                const handleTransitionEnd = () => {
+                  item.classList.add('done');
+                  item.removeEventListener('transitionend', handleTransitionEnd);
+                  resolve();
+                };
+                item.addEventListener('transitionend', handleTransitionEnd);
+                item.style.transform = 'scale(0)';
+              });
+            })
+          );
+        }
+
+        // 其他未消除的 item 归位
+        const inMoveListNotDoneItemElementList2 = [
+          ...mainElement.querySelectorAll('.item.in-move-list:not(.done)'),
+        ].sort((a, b) => {
+          // 根据插入顺序排序
+          const aInMoveListIndex = a.dataset.inMoveListIndex;
+          const bInMoveListIndex = b.dataset.inMoveListIndex;
+          return aInMoveListIndex - bInMoveListIndex;
+        });
+        inMoveListNotDoneItemElementList2.forEach((item, index) => {
+          const offsetLeft = moveListElement.offsetLeft - mainElement.offsetLeft + index * itemSize;
+
+          item.style.left = `${offsetLeft}px`;
+        });
+
+        // 重置操作
+        transitionEndEventCallCount = 0;
+        checkItemDisabled();
+
+        // 卡槽已满
+        if (inMoveListNotDoneItemElementList2.length === moveListCount) {
+          alert('卡槽已满');
+          return;
+        }
+
+        // 游戏胜利
+        const noDoneItemElementList = [...mainElement.querySelectorAll('.item:not(.done)')];
+        if (noDoneItemElementList.length === 0) {
+          alert('游戏胜利');
+          return;
+        }
+
+        // 允许继续移动下一个 item
+        canMove = true;
+      }
+    };
+
+    itemElementList.forEach((item) => {
+      item.addEventListener('click', () => {
+        moveItem(item);
+
+        item.addEventListener('transitionend', handleMoveItemEnd);
+      });
+    });
+
+    itemList;
+  </script>
+</html>

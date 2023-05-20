@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        android:allowBackup: 是否允许应用备份 (允许用户备份安装包和应用数据, 以便刷机后数据丢失后恢复应用, 用户可通过 adb backup 和 adb restore 来进行数据备份和恢复)
+        android:dataExtractionRules: 配置自动备份的新方法, 用于淘汰 allowBackup 和 fullBackupContent
+        android:fullBackupContent: 配置自动备份
+        android:icon: 指定 app 图标
+        android:roundIcon: 指定 app 圆角图标
+        android:label: 指定 app 名称
+        android:supportsRtl: 是否支持 阿拉伯语/波斯语 这种从右往左的文字排列顺序
+        android:theme: app 主题
+    -->
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HelloWorld"
+        tools:targetApi="31">
+
+        <!--
+             android:name=".MainActivity": 第一个显示的 activity
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity2" />
+    </application>
+
+</manifest>

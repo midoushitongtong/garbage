@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="form1"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/form1"
+        android:shortcutLongLabel="@string/form1">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.midoushitongtong.component02"
+            android:targetClass="com.midoushitongtong.component02.Form1Activity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="form2"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/home"
+        android:shortcutLongLabel="@string/home">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.midoushitongtong.component02"
+            android:targetClass="com.midoushitongtong.component02.HomeActivity" />
+    </shortcut>
+
+</shortcuts>

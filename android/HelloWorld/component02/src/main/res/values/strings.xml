@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">component02</string>
+    <string name="weather_str">晴天</string>
+    <string name="form1">form1</string>
+    <string name="home">home</string>
+</resources>

@@ -16,3 +16,5 @@ rootProject.name = "Hello World"
 include ':app'
 include ':component01'
 include ':component02'
+include ':component03'
+include ':component04'

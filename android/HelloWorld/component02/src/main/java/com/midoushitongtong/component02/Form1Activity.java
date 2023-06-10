@@ -15,18 +15,17 @@ import android.widget.TextView;
 public class Form1Activity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
         new ActivityResultContracts.StartActivityForResult(),
-        new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if (result == null || result.getResultCode() != Activity.RESULT_OK || result.getData() == null) {
-                    return;
-                }
-                Intent intent = result.getData();
-                TextView content = findViewById(R.id.content);
-                Bundle bundle = intent.getExtras();
-                content.setText(bundle.getString("age"));
+        result -> {
+            if (result == null || result.getResultCode() != Activity.RESULT_OK || result.getData() == null) {
+                return;
             }
-    });
+
+            Intent intent = result.getData();
+            TextView content = findViewById(R.id.content);
+            Bundle bundle = intent.getExtras();
+            content.setText(bundle.getString("age"));
+        }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

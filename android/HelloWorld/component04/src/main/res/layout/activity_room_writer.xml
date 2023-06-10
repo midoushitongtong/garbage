@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="书名: "
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+        />
+        <EditText
+            android:id="@+id/name_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_text"
+            android:hint="请输入书名"
+            android:padding="10dp"
+            android:textSize="18sp"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="作者: "
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+        />
+        <EditText
+            android:id="@+id/author_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_text"
+            android:hint="请输入作者"
+            android:padding="10dp"
+            android:textSize="18sp"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="出版社: "
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+        />
+        <EditText
+            android:id="@+id/press_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_text"
+            android:hint="请输入出版社"
+            android:padding="10dp"
+            android:textSize="18sp"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="价格: "
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+        />
+        <EditText
+            android:id="@+id/price_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_text"
+            android:hint="请输入价格"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:inputType="numberDecimal"
+        />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加"
+    />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="删除"
+    />
+
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="修改"
+    />
+
+    <Button
+        android:id="@+id/select_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查询"
+    />
+
+</LinearLayout>

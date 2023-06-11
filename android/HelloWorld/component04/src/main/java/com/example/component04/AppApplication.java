@@ -44,10 +44,8 @@ public class AppApplication extends Application {
             }
 
             // 初始化数据库中的商品数据
-            TaoBaoDBHelper shoppingDBHelper = TaoBaoDBHelper.getInstance(this);
-            shoppingDBHelper.openWriteLink();
-            shoppingDBHelper.insertProduct(productList);
-            shoppingDBHelper.close();
+            TaoBaoDBHelper taobaoDBHelper = TaoBaoDBHelper.getInstance(this);
+            taobaoDBHelper.insertProduct(productList);
 
             // 保存 "是否首次打开" 为 false
             SharedUtil.getInstance(this).writeBoolean("first", false);
@@ -66,6 +64,11 @@ public class AppApplication extends Application {
                 .allowMainThreadQueries()
                 .build();
         initProduct();
+
+        TaoBaoDBHelper taobaoDBHelper = TaoBaoDBHelper.getInstance(this);
+        taobaoDBHelper.openReadLink();
+        taobaoDBHelper.openWriteLink();
+
         Log.d("ning", "AppApplication: onCreate");
     }
 
@@ -73,6 +76,7 @@ public class AppApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
+        TaoBaoDBHelper.getInstance(this).close();
         Log.d("ning", "AppApplication: onTerminate");
     }
 

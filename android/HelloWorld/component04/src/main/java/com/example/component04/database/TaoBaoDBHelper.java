@@ -69,6 +69,20 @@ public class TaoBaoDBHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public Product selectProductById(int id) {
+        Product product = null;
+        Cursor cursor = readDB.query(PRODUCT_TABLE_NAME, null, "id=?", new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor.moveToNext()) {
+            product = new Product();
+            product.id = cursor.getInt(0);
+            product.name = cursor.getString(1);
+            product.description = cursor.getString(2);
+            product.price = cursor.getFloat(3);
+            product.picPath = cursor.getString(4);
+        }
+        return product;
+    }
+
     public List<Cart> selectAllCart() {
         List<Cart> list = new ArrayList<>();
         Cursor cursor = readDB.rawQuery("SELECT * FROM " + CART_TABLE_NAME, null);
@@ -107,6 +121,10 @@ public class TaoBaoDBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return cart;
+    }
+
+    public void deleteAllCart() {
+        writeDB.delete(CART_TABLE_NAME, null, null);
     }
 
     public void insertCart(int productId) {

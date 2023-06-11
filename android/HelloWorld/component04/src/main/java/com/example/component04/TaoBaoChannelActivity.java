@@ -2,6 +2,7 @@ package com.example.component04;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,8 +20,6 @@ import com.example.component04.entity.Cart;
 import com.example.component04.entity.Product;
 import com.example.component04.util.ToastUtil;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +33,18 @@ public class TaoBaoChannelActivity extends AppCompatActivity {
         cartCountTextView = findViewById(R.id.cart_count_text_view);
 
         titleTextView.setText("手机商场");
-        titleTextView.setText("0");
+
+        // 返回按钮
+        findViewById(R.id.back_image_view).setOnClickListener(view -> {
+            finish();
+        });
+
+        // 跳转到购物车页面
+        findViewById(R.id.cart_image_view).setOnClickListener(view -> {
+            Intent intent = new Intent(this, TaoBaoCartActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
     }
 
     private void initCartCount() {
@@ -53,9 +63,6 @@ public class TaoBaoChannelActivity extends AppCompatActivity {
                 : 0;
         dataMap.put("cartCount", String.valueOf(count));
         cartCountTextView.setText(String.valueOf(count));
-        for (Cart cart : taoBaoDBHelper.selectAllCart()) {
-            Log.d("ning", cart.toString());
-        }
     }
 
     private void renderProductList() {
@@ -67,7 +74,7 @@ public class TaoBaoChannelActivity extends AppCompatActivity {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(screenWidth / 2, ViewGroup.LayoutParams.WRAP_CONTENT);
         for (Product product : list.subList(0, 5)) {
             // 将布局文件转成组件
-            View productItem = LayoutInflater.from(this).inflate(R.layout.product_item, null);
+            View productItem = LayoutInflater.from(this).inflate(R.layout.item_product, null);
             // 获取组件
             ImageView picImageView = productItem.findViewById(R.id.pic_image_view);
             TextView nameTextView = productItem.findViewById(R.id.name_text_view);
@@ -91,8 +98,6 @@ public class TaoBaoChannelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taobao_channel);
         taoBaoDBHelper = TaoBaoDBHelper.getInstance(this);
-        taoBaoDBHelper.openReadLink();
-        taoBaoDBHelper.openWriteLink();
 
         init();
 
@@ -102,7 +107,6 @@ public class TaoBaoChannelActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        taoBaoDBHelper.close();
     }
 
     @Override

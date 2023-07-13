@@ -88,6 +88,12 @@ public class TaoBaoChannelActivity extends AppCompatActivity {
             addCartButton.setOnClickListener(view -> {
                 addToCart(product.id, product);
             });
+            // 图片点击事件
+            picImageView.setOnClickListener(view -> {
+                Intent intent = new Intent(this, ProductDetailActivity.class);
+                intent.putExtra("productId", product.id);
+                startActivity(intent);
+            });
             // 插入组件
             productListGridLayout.addView(productItem, layoutParams);
         }

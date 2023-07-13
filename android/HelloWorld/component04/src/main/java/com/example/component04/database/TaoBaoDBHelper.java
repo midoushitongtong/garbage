@@ -127,6 +127,10 @@ public class TaoBaoDBHelper extends SQLiteOpenHelper {
         writeDB.delete(CART_TABLE_NAME, null, null);
     }
 
+    public void deleteCartByProductId(int productId) {
+        writeDB.delete(CART_TABLE_NAME, "product_id=?", new String[]{String.valueOf(productId)});
+    }
+
     public void insertCart(int productId) {
         Cart cart = selectCartById(productId);
         ContentValues values = new ContentValues();

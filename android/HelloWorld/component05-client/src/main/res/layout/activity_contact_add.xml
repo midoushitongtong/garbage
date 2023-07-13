@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="姓名: "
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+        />
+        <EditText
+            android:id="@+id/name_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_text"
+            android:hint="请输入姓名"
+            android:padding="10dp"
+            android:textSize="18sp"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="电话: "
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+        />
+        <EditText
+            android:id="@+id/phone_number_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_text"
+            android:hint="请输入电话"
+            android:padding="10dp"
+            android:textSize="18sp"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginVertical="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="邮箱: "
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+        />
+        <EditText
+            android:id="@+id/email_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_edit_text"
+            android:hint="请输入邮箱"
+            android:padding="10dp"
+            android:textSize="18sp"
+        />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加联系人"
+    />
+
+    <Button
+        android:id="@+id/read_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="读取联系人"
+    />
+
+    <TextView
+        android:id="@+id/data_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    />
+
+</LinearLayout>

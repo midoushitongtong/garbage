@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">component05-client</string>
+    <string name="file_provider">com.midoushitongtong.component05_client.fileProvider</string>
 </resources>

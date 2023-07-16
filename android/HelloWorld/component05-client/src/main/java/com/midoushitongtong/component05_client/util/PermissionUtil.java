@@ -26,9 +26,14 @@ public class PermissionUtil {
             Manifest.permission.READ_SMS,
             Manifest.permission.SEND_SMS
     };
+    public static final String[] PERMISSIONS_EXTERNAL_STORAGE = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     public static final int REQUEST_CODE_CONTACT = 1;
     public static final int REQUEST_CODE_SMS = 2;
     public static final int REQUEST_CODE_ALL = 3;
+    public static final int REQUEST_CODE_EXTERNAL_STORAGE = 3;
 
 
     // 检查是否有对应的权限

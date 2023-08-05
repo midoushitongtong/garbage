@@ -1,4 +1,4 @@
-package com.example.component04;
+package com.midoushitongtong.component06;
 
 import android.app.Application;
 import android.content.res.Configuration;
@@ -8,13 +8,11 @@ import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.room.Room;
 
-import com.example.component04.database.BookDatabase;
-import com.example.component04.database.TaoBaoDBHelper;
-import com.example.component04.entity.Product;
-import com.example.component04.util.FileUtil;
-import com.example.component04.util.SharedUtil;
+import com.midoushitongtong.component06.database.TaoBaoDBHelper;
+import com.midoushitongtong.component06.entity.Product;
+import com.midoushitongtong.component06.util.FileUtil;
+import com.midoushitongtong.component06.util.SharedUtil;
 
 import java.io.File;
 import java.util.HashMap;
@@ -24,8 +22,6 @@ public class AppApplication extends Application {
     private static AppApplication appApplication;
     // 全局变量
     public HashMap<String, String> dataMap = new HashMap<>();
-    // 数据库对象
-    private BookDatabase bookDatabase;
 
     public static AppApplication getInstance() {
         return appApplication;
@@ -57,12 +53,6 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appApplication = this;
-        bookDatabase = Room.databaseBuilder(this, BookDatabase.class, "book")
-                // 允许迁移数据库 (发生数据库变更的时候, Room 默认会删除原来的数据库，如此一来数据就丢失了，故要改为迁移的方式保留之前的数据)
-                .allowMainThreadQueries()
-                // 允许在主线程中操作数据库 (Room 默认不允许在主线程中操作数据库)
-                .allowMainThreadQueries()
-                .build();
 
         TaoBaoDBHelper taobaoDBHelper = TaoBaoDBHelper.getInstance(this);
         taobaoDBHelper.openReadLink();
@@ -89,7 +79,4 @@ public class AppApplication extends Application {
         Log.d("ning", "AppApplication: onConfigurationChanged");
     }
 
-    public BookDatabase getBookDatabase() {
-        return bookDatabase;
-    }
 }

@@ -27,7 +27,7 @@ public class BillPagerAdapter extends FragmentStatePagerAdapter {
         int month = position + 1;
         String zeroMonth = month < 10 ? "0" + month : String.valueOf(month);
         String yearMonth = calendar.get(Calendar.YEAR) + "-" + zeroMonth;
-        Log.d("debug", yearMonth);
+        Log.d("ning", yearMonth);
         return BillFragment.newInstance(yearMonth);
     }
 

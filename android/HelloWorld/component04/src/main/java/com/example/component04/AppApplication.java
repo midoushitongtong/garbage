@@ -70,7 +70,7 @@ public class AppApplication extends Application {
 
         initProduct();
 
-        Log.d("debug", "AppApplication: onCreate");
+        Log.d("ning", "AppApplication: onCreate");
     }
 
     // App 终止时调用

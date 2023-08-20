@@ -2,7 +2,6 @@ package com.midoushitongtong.component06.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ public class CartAdapter extends BaseAdapter {
     public CartAdapter(Context context, List<Cart> cartList) {
         this.context = context;
         this.cartList = cartList;
-        Log.d("debug", "Test");
     }
 
     @Override

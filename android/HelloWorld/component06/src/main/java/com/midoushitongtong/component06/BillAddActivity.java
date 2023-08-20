@@ -62,7 +62,7 @@ public class BillAddActivity extends AppCompatActivity {
         }
 
 //        for (BillInfo billInfo1 : billDBHelper.selectAll()) {
-//            Log.d("debug", billInfo1.toString());
+//            Log.d("ning", billInfo1.toString());
 //        }
     }
 

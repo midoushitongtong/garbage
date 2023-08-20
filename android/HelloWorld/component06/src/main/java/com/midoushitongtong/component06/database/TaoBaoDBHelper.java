@@ -188,7 +188,7 @@ public class TaoBaoDBHelper extends SQLiteOpenHelper {
                 ");";
         db.execSQL(productSQL);
 
-        Log.d("debug", "123");
+        Log.d("ning", "123");
 
         String cartSQL =
                 "CREATE TABLE IF NOT EXISTS " + CART_TABLE_NAME + " (" +

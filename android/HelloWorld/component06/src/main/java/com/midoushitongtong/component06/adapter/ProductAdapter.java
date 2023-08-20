@@ -63,7 +63,7 @@ public class ProductAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Log.d("debug", product.toString());
+        Log.d("ning", product.toString());
         
         // 设置组件数据
         viewHolder.picImageView.setImageURI(Uri.parse(product.picPath));

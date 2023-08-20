@@ -95,7 +95,7 @@ public class BillDBHelper extends SQLiteOpenHelper {
     public List<BillInfo> selectByMonth(String yearMonth) {
         List<BillInfo> list = new ArrayList<>();
         String sql = "SELECT * FROM " + BILL_TABLE_NAME + " WHERE DATE LIKE '" + yearMonth + "%'";
-        Log.d("debug", sql);
+        Log.d("ning", sql);
         Cursor cursor = readDB.rawQuery(sql, null);
         while (cursor.moveToNext()) {
             BillInfo billInfo = new BillInfo();

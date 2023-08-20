@@ -60,7 +60,7 @@ public class AppApplication extends Application {
 
         initProduct();
 
-        Log.d("debug", "AppApplication: onCreate");
+        Log.d("ning", "AppApplication: onCreate");
     }
 
     // App 终止时调用
@@ -68,7 +68,7 @@ public class AppApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         TaoBaoDBHelper.getInstance(this).close();
-        Log.d("debug", "AppApplication: onTerminate");
+        Log.d("ning", "AppApplication: onTerminate");
     }
 
     // 配置改变时调用
@@ -76,7 +76,7 @@ public class AppApplication extends Application {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.d("debug", "AppApplication: onConfigurationChanged");
+        Log.d("ning", "AppApplication: onConfigurationChanged");
     }
 
 }

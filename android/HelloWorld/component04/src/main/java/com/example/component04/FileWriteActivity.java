@@ -51,14 +51,14 @@ public class FileWriteActivity extends AppCompatActivity {
             stringBuilder.append("体重:").append(weight).append("\n");
             stringBuilder.append("婚姻状况:").append(marry);
 
-            Log.d("ning", path);
+            Log.d("debug", path);
             FileUtil.saveText(path, stringBuilder.toString());
 
             ToastUtil.show(this, "保存成功");
         });
 
         readButton.setOnClickListener(view -> {
-            Log.d("ning", path);
+            Log.d("debug", path);
             String txt = FileUtil.readText(path);
             dataTextView.setText(txt);
         });

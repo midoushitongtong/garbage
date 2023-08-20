@@ -44,7 +44,7 @@ public class ProviderMmsActivity extends AppCompatActivity {
         // 兼容 android 7.0 将 Uri 转为 FileProvider
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             uri = FileProvider.getUriForFile(this, getString(R.string.file_provider), new File(path));
-            Log.d("ning", uri.toString());
+            Log.d("debug", uri.toString());
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

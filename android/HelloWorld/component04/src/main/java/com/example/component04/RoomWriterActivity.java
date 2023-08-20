@@ -59,7 +59,7 @@ public class RoomWriterActivity extends AppCompatActivity {
         findViewById(R.id.select_button).setOnClickListener(view -> {
             List<Book> list = bookDao.queryAll();
             for (Book book : list) {
-                Log.d("ning", book.toString());
+                Log.d("debug", book.toString());
             }
         });
     }

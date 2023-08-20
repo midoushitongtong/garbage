@@ -53,7 +53,7 @@ public class ContentWriteActivity extends AppCompatActivity {
                 }
             }
             for (User item : list) {
-                Log.d("ning", item.toString());
+                Log.d("debug", item.toString());
             }
             if (cursor != null) {
                 cursor.close();

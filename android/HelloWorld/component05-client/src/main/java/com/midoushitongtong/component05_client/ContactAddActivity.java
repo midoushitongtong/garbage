@@ -173,7 +173,7 @@ public class ContactAddActivity extends AppCompatActivity {
         cursor.close();
 
         for (Contact c : list) {
-            Log.d("ning", c.toString());
+            Log.d("debug", c.toString());
         }
     }
 

@@ -65,11 +65,11 @@ public class SQLiteHelperActivity extends AppCompatActivity {
                 ToastUtil.show(this, "没有查询到任何记录");
             }
             list.forEach(user -> {
-                Log.d("ning", user.toString());
+                Log.d("debug", user.toString());
             });
 
 //            User user = userDBHelper.queryByName("1");
-//            Log.d("ning", user.toString());
+//            Log.d("debug", user.toString());
         });
     }
 

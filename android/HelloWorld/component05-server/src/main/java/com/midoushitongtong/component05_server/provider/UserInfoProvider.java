@@ -59,7 +59,7 @@ public class UserInfoProvider extends ContentProvider {
     // content://com.midoushitongtong.component05_server.provider.UserInfoProvider/user
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Log.d("ning", "UserInfoProvider insert");
+        Log.d("debug", "UserInfoProvider insert");
         if (URI_MATCHER.match(uri) == SINGLE) {
             SQLiteDatabase writeDB = userDBHelper.getWritableDatabase();
             long rowId = writeDB.insert(UserDBHelper.TABLE_NAME, null, values);
@@ -78,7 +78,7 @@ public class UserInfoProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Log.d("ning", "UserInfoProvider query");
+        Log.d("debug", "UserInfoProvider query");
         if (URI_MATCHER.match(uri) == SINGLE) {
             SQLiteDatabase readDB = userDBHelper.getReadableDatabase();
             return readDB.query(UserDBHelper.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
@@ -95,7 +95,7 @@ public class UserInfoProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        Log.d("ning", "UserInfoProvider onCreate");
+        Log.d("debug", "UserInfoProvider onCreate");
         userDBHelper = UserDBHelper.getInstance(getContext());
         return true;
     }

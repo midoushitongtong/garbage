@@ -19,7 +19,7 @@ public class PermissionLazyActivity extends AppCompatActivity {
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.fromParts("package", getPackageName(), null));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Log.d("ning", getPackageName());
+        Log.d("debug", getPackageName());
         startActivity(intent);
     }
 
@@ -43,7 +43,7 @@ public class PermissionLazyActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PermissionUtil.REQUEST_CODE_CONTACT:
-                Log.d("ning", grantResults.toString());
+                Log.d("debug", grantResults.toString());
                 if (PermissionUtil.checkGrant(grantResults)) {
                     Toast.makeText(this, "获取通讯录权限成功", Toast.LENGTH_SHORT).show();
                 } else {

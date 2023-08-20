@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.HelloWorld" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">#0066ff</item>
+        <item name="colorAccent">#0066ff</item>
+    </style>
+
+    <style name="Theme.HelloWorld" parent="Base.Theme.HelloWorld" />
+</resources>

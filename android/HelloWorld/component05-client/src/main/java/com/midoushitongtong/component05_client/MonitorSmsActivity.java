@@ -46,8 +46,8 @@ public class MonitorSmsActivity extends AppCompatActivity {
             if (cursor.moveToNext()) {
                 String sender = cursor.getString(cursor.getColumnIndex("address"));
                 String body = cursor.getString(cursor.getColumnIndex("body"));
-                Log.d("ning", String.format("sender: %s, body: %s", sender, body));
-                Log.d("ning", body);
+                Log.d("debug", String.format("sender: %s, body: %s", sender, body));
+                Log.d("debug", body);
             }
             cursor.close();
         }

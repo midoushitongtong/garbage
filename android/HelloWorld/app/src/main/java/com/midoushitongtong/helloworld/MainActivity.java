@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 打印 log
-        Log.d("ning", "hello world");
+        Log.d("debug", "hello world");
         // 初始化
         init();
     }

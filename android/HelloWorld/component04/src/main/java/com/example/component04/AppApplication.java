@@ -63,13 +63,14 @@ public class AppApplication extends Application {
                 // 允许在主线程中操作数据库 (Room 默认不允许在主线程中操作数据库)
                 .allowMainThreadQueries()
                 .build();
-        initProduct();
 
         TaoBaoDBHelper taobaoDBHelper = TaoBaoDBHelper.getInstance(this);
         taobaoDBHelper.openReadLink();
         taobaoDBHelper.openWriteLink();
 
-        Log.d("ning", "AppApplication: onCreate");
+        initProduct();
+
+        Log.d("debug", "AppApplication: onCreate");
     }
 
     // App 终止时调用
@@ -77,7 +78,7 @@ public class AppApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         TaoBaoDBHelper.getInstance(this).close();
-        Log.d("ning", "AppApplication: onTerminate");
+        Log.d("debug", "AppApplication: onTerminate");
     }
 
     // 配置改变时调用
@@ -85,7 +86,7 @@ public class AppApplication extends Application {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.d("ning", "AppApplication: onConfigurationChanged");
+        Log.d("debug", "AppApplication: onConfigurationChanged");
     }
 
     public BookDatabase getBookDatabase() {

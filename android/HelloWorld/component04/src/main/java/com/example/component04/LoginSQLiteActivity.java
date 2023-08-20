@@ -139,8 +139,8 @@ public class LoginSQLiteActivity extends AppCompatActivity {
             }
 
             // 密码登录
-            Log.d("ning", passwordEditText.getText().toString());
-            Log.d("ning", password);
+            Log.d("debug", passwordEditText.getText().toString());
+            Log.d("debug", password);
             if (!passwordEditText.getText().toString().equals(password)) {
                 Toast.makeText(this, "请输入正确的密码", Toast.LENGTH_SHORT).show();
                 return;

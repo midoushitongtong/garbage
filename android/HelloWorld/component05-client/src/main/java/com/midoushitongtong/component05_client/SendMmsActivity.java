@@ -25,7 +25,7 @@ public class SendMmsActivity extends AppCompatActivity {
                 // 获取选中图片的 uri 对象
                 picUri = intent.getData();
                 if (picUri != null) {
-                    Log.d("ning", picUri + "");
+                    Log.d("debug", picUri + "");
                     attachmentImageView.setImageURI(picUri);
                 }
             }

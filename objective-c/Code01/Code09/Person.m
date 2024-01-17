@@ -11,6 +11,8 @@
 - (void)sayHi
 {
     NSLog(@"Hi");
+    NSLog(@"%p", self);
+    [self setAge:200];
 }
 
 - (void)setName:(NSString *)name
@@ -44,7 +46,18 @@
     [p setAge:age];
     p->_id = id;
     id++;
+    
     return p;
+}
+
+- (void)test
+{
+    NSLog(@"%p", self);
+}
+
++ (void)test
+{
+    NSLog(@"%p", self);
 }
 
 @end

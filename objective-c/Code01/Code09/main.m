@@ -52,11 +52,22 @@ int main(int argc, const char * argv[]) {
 //
 //    [Solider sayHi];
     
-    Person *p = [Person personWithName:@"1" andAge:2];
-    NSLog(@"%d", p->_id);
+//    Person *p = [Person personWithName:@"1" andAge:2];
+//    NSLog(@"%d", p->_id);
+//
+//    Person *p2 = [Person personWithName:@"2" andAge:3];
+//    NSLog(@"%d", p2->_id);
+//
+//    [p sayHi];
+//    [p sayHi];
+//    [p2 sayHi];
+//    NSLog(@"%d", [p age]);
+//    NSLog(@"%d", [p2 age]);
     
-    Person *p2 = [Person personWithName:@"2" andAge:3];
-    NSLog(@"%d", p2->_id);
+//    [Person test];
+//    Person *p1 = [Person new];
+    
+    NSLog(@"%p", Person.class);
 
     return 0;
 }

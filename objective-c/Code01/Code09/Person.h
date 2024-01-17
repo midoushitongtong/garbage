@@ -27,4 +27,6 @@
 + (instancetype)person;
 
 + (instancetype)personWithName:(NSString *)name andAge:(int)age;
+
++ (void)test;
 @end

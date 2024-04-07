@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      /** @type {HTMLCanvasElement} */
+      const canvas = document.querySelector('#canvas');
+      // 初始化 canvas 宽高
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // 获取 WebGL 上下文
+      const gl = canvas.getContext('webgl');
+      // 设置 WebGL 上下文的清除颜色为黑色
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      // 清除颜色缓冲区，颜色缓冲区指的是存储颜色信息的区域
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      // 顶点着色器源码，用来定义顶点的位置
+      const vertexShaderSource = `
+        attribute vec4 aVertexPosition;
+        uniform mat4 uMatrix;
+        varying vec4 vColor;
+        void main() {
+          gl_Position = uMatrix * aVertexPosition;
+          vColor = gl_Position;
+        }
+      `;
+      // 创建顶点着色器对象
+      const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+      // 将着色器源码分配给着色器对象
+      gl.shaderSource(vertexShader, vertexShaderSource);
+      // 编译顶点着色器
+      gl.compileShader(vertexShader);
+      // 片段着色器源码，用来定义片段的颜色
+      const fragmentShaderSource = `
+        precision mediump float;
+        varying vec4 vColor;
+        void main() {
+          gl_FragColor = vColor;
+        }
+      `;
+      // 创建片段着色器对象
+      const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+      // 将着色器源码分配给着色器对象
+      gl.shaderSource(fragmentShader, fragmentShaderSource);
+      // 编译片段着色器
+      gl.compileShader(fragmentShader);
+      // 创建着色器程序对象
+      const shaderProgram = gl.createProgram();
+      // 将顶点着色器添加到着色器程序对象
+      gl.attachShader(shaderProgram, vertexShader);
+      // 将片段着色器添加到着色器程序对象
+      gl.attachShader(shaderProgram, fragmentShader);
+      // 链接着色器程序对象
+      gl.linkProgram(shaderProgram);
+      // 使用着色器程序对象
+      gl.useProgram(shaderProgram);
+      // 获取顶点位置属性的位置
+      const vertexPositionAttributeLocation = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
+      // 创建缓冲区对象
+      const vertexPositionBuffer = gl.createBuffer();
+      // 绑定缓冲区对象到 ARRAY_BUFFER
+      gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
+      // 定义顶点位置数据
+      const triangleVertices = [0.0, 0.5, -0.5, -0.5, 0.5, -0.5];
+      // 将顶点位置数据存储到缓冲区对象
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
+      // 启用顶点属性数组
+      gl.enableVertexAttribArray(vertexPositionAttributeLocation);
+      // 指定顶点属性数组数据
+      gl.vertexAttribPointer(vertexPositionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
+      // 绘制三角形
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      // 设置缩放
+      const scale = {
+        x: 1,
+        y: 1,
+        z: 1,
+      };
+
+      const animate = () => {
+        if (scale.x <= 0) {
+          return;
+        }
+        scale.x -= 0.01;
+        scale.y -= 0.01;
+        scale.z -= 0.01;
+        const mat = new Float32Array([
+          //
+          scale.x,
+          0.0,
+          0.0,
+          0.0,
+          //
+          0.0,
+          scale.y,
+          0.0,
+          0.0,
+          //
+          0.0,
+          0.0,
+          scale.z,
+          0.0,
+          //
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+        ]);
+
+        // 获取 uniform 变量位置
+        const uMatrix = gl.getUniformLocation(shaderProgram, 'uMatrix');
+        gl.uniformMatrix4fv(uMatrix, false, mat);
+
+        // 绘制三角形
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+        requestAnimationFrame(animate);
+      };
+
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>

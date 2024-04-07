@@ -1,141 +1,193 @@
 import {
-  AmbientLight,
-  AnimationMixer,
-  DirectionalLight,
-  PMREMGenerator,
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
-  LinearToneMapping,
+  Color,
+  Mesh,
+  AxesHelper,
+  MeshStandardMaterial,
+  AmbientLight,
+  DirectionalLight,
+  Object3DEventMap,
+  PlaneGeometry,
+  DoubleSide,
+  SphereGeometry,
+  Vector2,
+  TextureLoader,
+  DataTexture,
+  EquirectangularReflectionMapping,
 } from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { MapControls } from 'three/addons/controls/MapControls.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import anime from 'animejs/lib/anime.es.js'; // 导入动画库
+// 导入 water
+import { Water } from 'three/examples/jsm/objects/Water2.js';
+import { GLTF, GLTFLoader, RGBELoader } from 'three/examples/jsm/Addons.js';
 
-// 渲染器
-const renderer = new WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-renderer.toneMapping = LinearToneMapping;
-renderer.toneMappingExposure = Math.pow(2, 0.0);
+const initData = async () => {
+  let renderer: WebGLRenderer | undefined;
+  let camera: PerspectiveCamera | undefined;
+  let controls: OrbitControls | undefined;
+  let scene: Scene | undefined;
+  let mainModel: Mesh<SphereGeometry, MeshStandardMaterial, Object3DEventMap> | undefined;
 
-// 相机
-const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100000);
-const initCameraPosition = { x: 0, y: 1100, z: -800 };
-camera.position.set(initCameraPosition.x, initCameraPosition.y, initCameraPosition.z);
-camera.lookAt(0, 0, 0);
+  const init = async () => {
+    renderer = new WebGLRenderer();
 
-// 场景
-const scene = new Scene();
-scene.rotation.set(0, 0.785, 0);
+    // 初始化渲染器
+    renderer.setSize(window.innerWidth, window.innerHeight); // 渲染器宽高
+    renderer.setPixelRatio(window.devicePixelRatio * 1); // 设备像素和页面像素比例
+    renderer.shadowMap.enabled = true; // 开启投影
+    document.body.appendChild(renderer.domElement);
 
-// 地图控制器
-const controls = new MapControls(camera, renderer.domElement);
-controls.panSpeed = 2;
-controls.enablePan = true;
-controls.enableDamping = true;
-controls.enableZoom = false;
-controls.enableRotate = false;
-controls.addEventListener('change', () => {
-  controls.target.x = 0;
-  camera.position.x = 0;
-  const zDiff = camera.position.z + Math.abs(initCameraPosition.z);
-  camera.position.y = initCameraPosition.y + zDiff * 0.1;
-});
+    // 初始化相机
+    camera = new PerspectiveCamera(
+      100, // 视角
+      window.innerWidth / window.innerHeight, // 宽高比
+      0.1, // 近平面
+      1000 // 远平面
+    );
+    camera.lookAt(0, 0, 0);
+    camera.position.set(0, 2, 5); // 设置相机位置
 
-// 设置渲染环境
-// AmbientLight
-const ambientLight = new AmbientLight(0xffffff, 0.3);
-camera.add(ambientLight);
-// DirectionalLight
-const directionalLight = new DirectionalLight(0xffffff, 0.8 * Math.PI);
-directionalLight.position.set(10, 10, 10);
-camera.add(directionalLight);
-// PMREMGenerator
-const pmremGenerator = new PMREMGenerator(renderer);
-pmremGenerator.compileEquirectangularShader();
-// RoomEnvironment
-const neutralEnvironment = pmremGenerator.fromScene(new RoomEnvironment()).texture;
-scene.environment = neutralEnvironment;
-scene.background = neutralEnvironment;
+    // 初始化轨道控制器
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // 开启阻尼
 
-// 加载模型
-let mixer: any = null; // 用于控制动画的mixer
-const loader = new GLTFLoader()
-  .setDRACOLoader(new DRACOLoader().setDecoderPath('/three/examples/jsm/libs/draco/gltf/'))
-  .setKTX2Loader(
-    new KTX2Loader().setTranscoderPath('/three/examples/jsm/libs/basis/').detectSupport(renderer)
-  );
-loader.load('/model.glb', (gltf) => {
-  const model = gltf.scene;
-  // 添加模型
-  scene.add(model);
-  // 获取模型动画
-  mixer = new AnimationMixer(model);
-  gltf.animations.forEach((clip) => {
-    mixer.clipAction(clip).play();
-  });
-});
-scene.position.set(0, 0, 0);
+    // 初始化场景
+    scene = new Scene();
+    scene.background = new Color('#191919'); // 设置场景背景色
 
-// 渲染场景
-const animate = () => {
-  requestAnimationFrame(animate);
-  if (mixer) {
-    mixer.update(0.01); // 更新动画，0.01是时间增量，可以根据需要调整
-  }
+    // 坐标辅助器
+    const axesHelper = new AxesHelper(5);
+    scene?.add(axesHelper);
 
-  controls.update();
-  renderer.render(scene, camera);
+    // 灯光
+    const ambientLight = new AmbientLight('#ffffff', 2); // 环境光
+    scene.add(ambientLight);
+    const directionalLight = new DirectionalLight('#ffffff', 2); // 平行光
+    directionalLight.castShadow = true;
+    directionalLight.position.set(0, 5, 10);
+    scene.add(directionalLight);
+
+    // 背景
+    const rgbeLoader = new RGBELoader();
+    const floorTexture = await new Promise<DataTexture>((resolve) => {
+      rgbeLoader.load('/public/texture/limpopo_golf_course_2k.hdr', resolve);
+    });
+    floorTexture.mapping = EquirectangularReflectionMapping;
+    scene.background = floorTexture;
+    scene.environment = floorTexture;
+
+    // 鱼缸模型
+    const gltfLoader = new GLTFLoader();
+    const yuGangGLTF = await new Promise<GLTF>((resolve) => {
+      gltfLoader.load('/public/model/yu-gang.glb', (gltf) => {
+        // 设置双面材质
+        // @ts-ignore
+        gltf.scene.children[0].material.side = DoubleSide;
+        resolve(gltf);
+      });
+    });
+    scene.add(yuGangGLTF.scene);
+
+    // 添加鱼缸的水面材质
+    const textureLoader = new TextureLoader();
+    const water = new Water(
+      // @ts-ignore
+      yuGangGLTF.scene.children[1].geometry,
+      {
+        color: '#e1e1e1',
+        scale: 1.0,
+        flowDirection: new Vector2(1, 1),
+        textureWidth: 1024,
+        textureHeight: 1024,
+        normalMap0: textureLoader.load('/public/texture/Water_1_M_Normal.jpg'),
+        normalMap1: textureLoader.load('/public/texture/Water_2_M_Normal.jpg'),
+      }
+    );
+    water.position.set(0, -0.2, 0);
+    scene.add(water);
+
+    // animate
+    const animate = () => {
+      if (!renderer || !camera || !controls || !scene) {
+        console.error('检测到变量未初始化');
+        return;
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+
+    // GUI
+    const gui = new GUI();
+    if (mainModel) {
+      const mainModelFolder = gui.addFolder('Main Model');
+      mainModelFolder.add(mainModel.position, 'x').step(0.01).name('主模型 position x');
+      mainModelFolder.add(mainModel.position, 'y').step(0.01).name('主模型 position y');
+      mainModelFolder.add(mainModel.position, 'z').step(0.01).name('主模型 position z');
+      mainModelFolder.add(mainModel.rotation, 'x').step(0.01).name('主模型 rotation x');
+      mainModelFolder.add(mainModel.rotation, 'y').step(0.01).name('主模型 rotation y');
+      mainModelFolder.add(mainModel.rotation, 'z').step(0.01).name('主模型 rotation z');
+      mainModelFolder
+        .addColor(
+          {
+            color: '#06f',
+          },
+          'color'
+        )
+        .onChange((value) => {
+          mainModel?.material.color.set(value);
+        });
+      mainModelFolder.add(mainModel, 'visible').name('是否显示');
+      mainModelFolder.add(mainModel.material, 'wireframe').name('显示网格线');
+      mainModelFolder
+        .add(
+          {
+            custom: () => {
+              anime({
+                targets: mainModel?.position,
+                x: 5,
+                duration: 500,
+                easing: 'linear',
+                loop: -1,
+                direction: 'alternate',
+              });
+            },
+          },
+          'custom'
+        )
+        .name('自定义事件');
+    }
+  };
+
+  const handleWindowResize = () => {
+    if (!renderer || !camera) {
+      console.error('检测到变量未初始化');
+      return;
+    }
+
+    // 更新渲染器宽高
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    // 更新相机宽高比
+    camera.aspect = window.innerWidth / window.innerHeight;
+    // 更新相机投影矩阵
+    camera.updateProjectionMatrix();
+  };
+
+  init();
+  window.addEventListener('resize', handleWindowResize);
+
+  // window.addEventListener('dblclick', () => {
+  //   if (!document.fullscreenElement) {
+  //     renderer?.domElement.requestFullscreen();
+  //   } else {
+  //     document.exitFullscreen();
+  //   }
+  // });
 };
-animate();
 
-// GUI
-const gui = new GUI();
-const secneFolder = gui.addFolder('Scene');
-secneFolder.add(scene.rotation, 'x').step(0.01).name('场景 Rotation X');
-secneFolder.add(scene.rotation, 'y').step(0.01).name('场景 Rotation y');
-secneFolder.add(scene.rotation, 'z').step(0.01).name('场景 Rotation z');
-
-// 添加触摸事件
-// let startY = -1;
-// const onTouchStart = (event: TouchEvent) => {
-//   startY = event.touches[0].clientY;
-// };
-// const onTouchMove = (event: TouchEvent) => {
-//   if (startY == -1) return;
-//   const lastY = event.touches[0].clientY;
-//   const deltaY = lastY - startY;
-//   startY = lastY;
-//   scene.position.z -= deltaY * 5;
-//   scene.position.x += deltaY * 5;
-//   scene.position.y -= deltaY * 0.5;
-// };
-// const onTouchEnd = () => {
-//   startY = -1;
-// };
-// const onMouseStart = (event: MouseEvent) => {
-//   startY = event.clientY;
-//   console.log(startY);
-// };
-// const onMouseMove = (event: MouseEvent) => {
-//   if (startY == -1) return;
-//   const lastY = event.clientY;
-//   const deltaY = lastY - startY;
-//   startY = lastY;
-//   scene.position.z -= deltaY * 5;
-//   scene.position.x += deltaY * 5;
-//   scene.position.y -= deltaY * 0.5;
-// };
-// const onMouseUp = () => {
-//   startY = -1;
-// };
-// window.addEventListener('touchstart', onTouchStart);
-// window.addEventListener('touchmove', onTouchMove);
-// window.addEventListener('touchend', onTouchEnd);
-// window.addEventListener('mousedown', onMouseStart);
-// window.addEventListener('mousemove', onMouseMove);
-// window.addEventListener('mouseup', onMouseUp);
+initData();

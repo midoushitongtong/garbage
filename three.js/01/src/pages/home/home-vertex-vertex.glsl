@@ -13,17 +13,17 @@ attribute vec2 uv;
 
 varying vec3 vPosition;
 varying float vElevation;
-varying vec2 vUv;
+varying vec2 vUV;
 
 void main() {
   vPosition = position;
-  vUv = uv;
+  vUV = uv;
 
-  vec4 modelPosition = vec4(position, 1.0);
+  vec4 modelPosition = modelMatrix * vec4(position, 1.0);
   modelPosition.z += sin((modelPosition.x + uTime * 0.5) * 10.0 ) * 0.05;
   modelPosition.z += sin((modelPosition.y + uTime * 0.5)* 10.0 ) * 0.05;
   vElevation = modelPosition.z;
 
-  // 将顶点变换到裁剪空间
+  // 将各个顶点变换到裁剪空间
   gl_Position = projectionMatrix * viewMatrix * modelPosition;
 }

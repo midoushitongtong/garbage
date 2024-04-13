@@ -120,13 +120,13 @@ const initData = async () => {
       bufferGeometry.setAttribute('color', new BufferAttribute(colors, 3));
       // 贴图
       const textureLoader = new TextureLoader();
-      const startTexture = textureLoader.load('/public/texture/star_01.png');
+      const starTexture = textureLoader.load('/public/texture/star_01.png');
       // 材质
       const pointsMaterial = new PointsMaterial({
         size: params.size, // 点大小
         sizeAttenuation: true, // 点大小是否因相机深度而衰减
-        map: startTexture,
-        alphaMap: startTexture,
+        map: starTexture,
+        alphaMap: starTexture,
         transparent: true,
         alphaTest: 0.5, // 透明度
         vertexColors: true, // 是否开启顶点着色

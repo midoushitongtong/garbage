@@ -24,10 +24,9 @@ const initData = async () => {
   let scene: Scene | undefined;
   let mainModel: Mesh<SphereGeometry, MeshStandardMaterial, Object3DEventMap> | undefined;
 
-  const init = () => {
-    renderer = new WebGLRenderer();
-
+  const init = async () => {
     // 初始化渲染器
+    renderer = new WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight); // 渲染器宽高
     renderer.setPixelRatio(window.devicePixelRatio * 1); // 设备像素和页面像素比例
     renderer.shadowMap.enabled = true; // 开启投影
@@ -41,7 +40,7 @@ const initData = async () => {
       1000 // 远平面
     );
     camera.lookAt(0, 0, 0);
-    camera.position.set(2, 2, 5); // 设置相机位置
+    camera.position.set(0, 2, 5); // 设置相机位置
 
     // 初始化轨道控制器
     controls = new OrbitControls(camera, renderer.domElement);
@@ -60,7 +59,7 @@ const initData = async () => {
     scene.add(ambientLight);
     const directionalLight = new DirectionalLight('#ffffff', 2); // 平行光
     directionalLight.castShadow = true;
-    directionalLight.position.set(-5, 5, 10);
+    directionalLight.position.set(0, 5, 10);
     scene.add(directionalLight);
 
     // 地面
@@ -76,17 +75,17 @@ const initData = async () => {
     scene.add(floor);
 
     // 小球
-    const geometry = new SphereGeometry(1, 64, 32);
-    const material = new MeshStandardMaterial({
+    const boxGeometry = new SphereGeometry(1, 64, 32);
+    const boxMaterial = new MeshStandardMaterial({
       metalness: 0.5,
       roughness: 0.05,
       color: '#06f',
     });
-    const mesh = new Mesh(geometry, material);
-    mesh.position.y = 1;
-    mesh.castShadow = true;
-    mainModel = mesh;
-    scene.add(mesh);
+    const boxMesh = new Mesh(boxGeometry, boxMaterial);
+    boxMesh.position.y = 1;
+    boxMesh.castShadow = true;
+    mainModel = boxMesh;
+    scene.add(boxMesh);
 
     // animate
     const animate = () => {

@@ -145,7 +145,7 @@ const initData = async () => {
           // 分享数据到 fragment shader
           vElevation = elevation;
  
-          // 将顶点变换到裁剪空间
+          // 将各个顶点变换到裁剪空间
           gl_Position = projectionMatrix * viewMatrix * modelPosition;
         }
       `,

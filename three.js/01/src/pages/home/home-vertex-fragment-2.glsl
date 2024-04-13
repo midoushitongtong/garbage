@@ -2,7 +2,7 @@ precision lowp float;
 
 uniform float uTime;
 
-varying vec2 vUv;
+varying vec2 vUV;
 
 #define PI 3.1415926
 
@@ -46,68 +46,68 @@ float noise (in vec2 st) {
 
 void main() {
   // 从左到右渐变
-  // float strength = vUv.x;
+  // float strength = vUV.x;
   // gl_FragColor = vec4(vstrength, vstrength, vstrength, 1);
 
   // 从下到上渐变
-  // float strength = vUv.y;
+  // float strength = vUV.y;
   // gl_FragColor = vec4(strength, strength, strength, 1);
   
   // 从上到下渐变
-  // float strength = 1.0 - vUv.y;
+  // float strength = 1.0 - vUV.y;
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = mod(vUv.y * 10.0, 1.0);
+  // float strength = mod(vUV.y * 10.0, 1.0);
   // strength = step(0.5, strength);
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = step(0.8, mod(vUv.x * 10.0, 1.0));
-  // strength += step(0.8, mod(vUv.y * 10.0, 1.0));
+  // float strength = step(0.8, mod(vUV.x * 10.0, 1.0));
+  // strength += step(0.8, mod(vUV.y * 10.0, 1.0));
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = abs(vUv.x - 0.5);
+  // float strength = abs(vUV.x - 0.5);
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = max(abs(vUv.x - 0.5),  abs(vUv.y - 0.5));
+  // float strength = max(abs(vUV.x - 0.5),  abs(vUV.y - 0.5));
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = vUv.x;
+  // float strength = vUV.x;
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = floor(vUv.y * 10.0) / 10.0;
+  // float strength = floor(vUV.y * 10.0) / 10.0;
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = floor(vUv.y * 10.0) / 10.0 * floor(vUv.x * 10.0) / 10.0;
+  // float strength = floor(vUV.y * 10.0) / 10.0 * floor(vUV.x * 10.0) / 10.0;
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
   // 随机效果
-  // float strength = random(vUv);
+  // float strength = random(vUV);
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
 
-  // float strength = floor(vUv.y * 10.0) / 10.0 * floor(vUv.x * 10.0) / 10.0;
+  // float strength = floor(vUV.y * 10.0) / 10.0 * floor(vUV.x * 10.0) / 10.0;
   // strength = random(vec2(strength, strength));
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // float strength = distance(vUv, vec2(0.5, 0.5));
+  // float strength = distance(vUV, vec2(0.5, 0.5));
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // vec2 rotateUv = rotate(vUv, uTime * 5.0, vec2(0.5, 0.5));
+  // vec2 rotateUv = rotate(vUV, uTime * 5.0, vec2(0.5, 0.5));
   // // float strength = rotateUv;
   // gl_FragColor = vec4(rotateUv.x, rotateUv.y, 1, 1);
 
-  // float strength = step(0.5, distance(vUv, vec2(0.5)) + 0.35);
-  // strength *= 1.0 - step(0.5, distance(vUv, vec2(0.5)) + 0.15);
+  // float strength = step(0.5, distance(vUV, vec2(0.5)) + 0.35);
+  // strength *= 1.0 - step(0.5, distance(vUV, vec2(0.5)) + 0.15);
   // gl_FragColor = vec4(strength, strength, strength, 1);
 
-  // vec2 rotateUv = rotate(vUv, -uTime * 5.0, vec2(0.5));
-  // float alpha = 1.0 - step(0.5, abs(distance(vUv, vec2(0.5))));
+  // vec2 rotateUv = rotate(vUV, -uTime * 5.0, vec2(0.5));
+  // float alpha = 1.0 - step(0.5, abs(distance(vUV, vec2(0.5))));
   // float angle = atan(rotateUv.x - 0.5, rotateUv.y - 0.5) ;
   // float strength = (angle + 3.14) / 6.28 ;
   // gl_FragColor = vec4(strength, strength, strength, alpha);
 
   
-  // float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
+  // float angle = atan(vUV.x - 0.5, vUV.y - 0.5);
   // float strength = mod(angle * 10.0, PI);
   // gl_FragColor = vec4(strength, strength, strength, 1);
 

@@ -12,17 +12,10 @@ import {
   PlaneGeometry,
   DoubleSide,
   SphereGeometry,
-  Vector2,
-  TextureLoader,
-  DataTexture,
-  EquirectangularReflectionMapping,
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import anime from 'animejs/lib/anime.es.js'; // 导入动画库
-// 导入 water
-import { Water } from 'three/examples/jsm/objects/Water2.js';
-import { GLTF, GLTFLoader, RGBELoader } from 'three/examples/jsm/Addons.js';
 
 const initData = async () => {
   let renderer: WebGLRenderer | undefined;
@@ -32,9 +25,8 @@ const initData = async () => {
   let mainModel: Mesh<SphereGeometry, MeshStandardMaterial, Object3DEventMap> | undefined;
 
   const init = async () => {
-    renderer = new WebGLRenderer();
-
     // 初始化渲染器
+    renderer = new WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight); // 渲染器宽高
     renderer.setPixelRatio(window.devicePixelRatio * 1); // 设备像素和页面像素比例
     renderer.shadowMap.enabled = true; // 开启投影
@@ -70,44 +62,30 @@ const initData = async () => {
     directionalLight.position.set(0, 5, 10);
     scene.add(directionalLight);
 
-    // 背景
-    const rgbeLoader = new RGBELoader();
-    const floorTexture = await new Promise<DataTexture>((resolve) => {
-      rgbeLoader.load('/public/texture/limpopo_golf_course_2k.hdr', resolve);
+    // 地面
+    const floorGeometry = new PlaneGeometry(50, 50);
+    const floorMaterial = new MeshStandardMaterial({
+      color: '#ffffff',
+      side: DoubleSide,
     });
-    floorTexture.mapping = EquirectangularReflectionMapping;
-    scene.background = floorTexture;
-    scene.environment = floorTexture;
+    const floor = new Mesh(floorGeometry, floorMaterial);
+    floor.rotation.set(-Math.PI / 2, 0, 0);
+    floor.position.set(0, -5, 0);
+    floor.receiveShadow = true;
+    scene.add(floor);
 
-    // 鱼缸模型
-    const gltfLoader = new GLTFLoader();
-    const yuGangGLTF = await new Promise<GLTF>((resolve) => {
-      gltfLoader.load('/public/model/yu-gang.glb', (gltf) => {
-        // 设置双面材质
-        // @ts-ignore
-        gltf.scene.children[0].material.side = DoubleSide;
-        resolve(gltf);
-      });
+    // 小球
+    const boxGeometry = new SphereGeometry(1, 64, 32);
+    const boxMaterial = new MeshStandardMaterial({
+      metalness: 0.5,
+      roughness: 0.05,
+      color: '#06f',
     });
-    scene.add(yuGangGLTF.scene);
-
-    // 添加鱼缸的水面材质
-    const textureLoader = new TextureLoader();
-    const water = new Water(
-      // @ts-ignore
-      yuGangGLTF.scene.children[1].geometry,
-      {
-        color: '#e1e1e1',
-        scale: 1.0,
-        flowDirection: new Vector2(1, 1),
-        textureWidth: 1024,
-        textureHeight: 1024,
-        normalMap0: textureLoader.load('/public/texture/Water_1_M_Normal.jpg'),
-        normalMap1: textureLoader.load('/public/texture/Water_2_M_Normal.jpg'),
-      }
-    );
-    water.position.set(0, -0.2, 0);
-    scene.add(water);
+    const boxMesh = new Mesh(boxGeometry, boxMaterial);
+    boxMesh.position.y = 1;
+    boxMesh.castShadow = true;
+    mainModel = boxMesh;
+    scene.add(boxMesh);
 
     // animate
     const animate = () => {

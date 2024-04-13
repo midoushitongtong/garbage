@@ -90,20 +90,20 @@ const initData = async () => {
       vertexShader: `
         precision lowp float;
         uniform float uTime;
-        varying vec2 vUv;
+        varying vec2 vUV;
         varying vec3 vPosition;
 
         void main() {
-          vUv = uv;
+          vUV = uv;
           vPosition = position;
-
-          // 将顶点位置变化到相机空间最终变换到裁剪空间
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          
+          // 将各个顶点变换到裁剪空间
+          gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
         }
       `,
       fragmentShader: `
         precision lowp float;
-        varying vec2 vUv;
+        varying vec2 vUV;
         varying vec4 vModelPosition;
         varying vec3 vPosition;
         

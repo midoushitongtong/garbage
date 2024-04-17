@@ -1,2 +1,2 @@
 import './assets/css/global.css';
-import './pages/home/Home.ts';
+import './pages/home/Home.js';

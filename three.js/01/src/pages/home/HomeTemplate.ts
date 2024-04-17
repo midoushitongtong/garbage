@@ -70,7 +70,7 @@ const initData = async () => {
     });
     const floor = new Mesh(floorGeometry, floorMaterial);
     floor.rotation.set(-Math.PI / 2, 0, 0);
-    floor.position.set(0, -5, 0);
+    floor.position.set(0, 0, 0);
     floor.receiveShadow = true;
     scene.add(floor);
 

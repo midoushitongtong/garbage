@@ -16,6 +16,7 @@ import {
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import anime from 'animejs/lib/anime.es.js'; // 导入动画库
+import { GLTF, GLTFLoader } from 'three/examples/jsm/Addons.js';
 
 const initData = async () => {
   let renderer: WebGLRenderer | undefined;
@@ -70,22 +71,49 @@ const initData = async () => {
     });
     const floor = new Mesh(floorGeometry, floorMaterial);
     floor.rotation.set(-Math.PI / 2, 0, 0);
-    floor.position.set(0, -5, 0);
+    floor.position.set(0, 0, 0);
     floor.receiveShadow = true;
     scene.add(floor);
 
-    // 小球
-    const boxGeometry = new SphereGeometry(1, 64, 32);
-    const boxMaterial = new MeshStandardMaterial({
-      metalness: 0.5,
-      roughness: 0.05,
-      color: '#06f',
+    // 加载模型
+    const gltfLoader = new GLTFLoader();
+    const qiu1GLTF = await new Promise<GLTF>((resolve) => {
+      gltfLoader.load('/public/model/qiu-1.glb', async (qiu1GLTF) => {
+        const qiu2GLTF = await new Promise<GLTF>((resolve) => {
+          gltfLoader.load('/public/model/qiu-2.glb', (qiu2GLTF) => {
+            resolve(qiu2GLTF);
+          });
+        });
+
+        const qiu1 = qiu1GLTF.scene.children[0];
+        const qiu2 = qiu2GLTF.scene.children[0];
+
+        qiu1.geometry.morphAttributes.position = [];
+        qiu1.geometry.morphAttributes.position.push(qiu2.geometry.attributes.position);
+        qiu1.updateMorphTargets();
+        qiu1.morphTargetInfluences[0] = 1;
+
+        const targets = {
+          width: 0,
+        };
+        anime({
+          targets,
+          width: 1,
+          duration: 500,
+          easing: 'linear',
+          direction: 'alternate',
+          loop: -1,
+          update() {
+            qiu1.morphTargetInfluences[0] = targets.width;
+          },
+        });
+
+        resolve(qiu1GLTF);
+      });
     });
-    const boxMesh = new Mesh(boxGeometry, boxMaterial);
-    boxMesh.position.y = 1;
-    boxMesh.castShadow = true;
-    mainModel = boxMesh;
-    scene.add(boxMesh);
+
+    qiu1GLTF.scene.position.set(0, 1, 0);
+    scene.add(qiu1GLTF.scene);
 
     // animate
     const animate = () => {

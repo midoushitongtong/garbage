@@ -79,37 +79,36 @@ const initData = async () => {
     const gltfLoader = new GLTFLoader();
     const qiu1GLTF = await new Promise<GLTF>((resolve) => {
       gltfLoader.load('/public/model/qiu-1.glb', async (qiu1GLTF) => {
-        const qiu2GLTF = await new Promise<GLTF>((resolve) => {
-          gltfLoader.load('/public/model/qiu-2.glb', (qiu2GLTF) => {
-            resolve(qiu2GLTF);
-          });
-        });
-
-        const qiu1 = qiu1GLTF.scene.children[0];
-        const qiu2 = qiu2GLTF.scene.children[0];
-
-        qiu1.geometry.morphAttributes.position = [];
-        qiu1.geometry.morphAttributes.position.push(qiu2.geometry.attributes.position);
-        qiu1.updateMorphTargets();
-        qiu1.morphTargetInfluences[0] = 1;
-
-        const targets = {
-          width: 0,
-        };
-        anime({
-          targets,
-          width: 1,
-          duration: 500,
-          easing: 'linear',
-          direction: 'alternate',
-          loop: -1,
-          update() {
-            qiu1.morphTargetInfluences[0] = targets.width;
-          },
-        });
-
         resolve(qiu1GLTF);
       });
+    });
+    const qiu2GLTF = await new Promise<GLTF>((resolve) => {
+      gltfLoader.load('/public/model/qiu-2.glb', (qiu2GLTF) => {
+        resolve(qiu2GLTF);
+      });
+    });
+
+    const qiu1 = qiu1GLTF.scene.children[0];
+    const qiu2 = qiu2GLTF.scene.children[0];
+
+    qiu1.geometry.morphAttributes.position = [];
+    qiu1.geometry.morphAttributes.position.push(qiu2.geometry.attributes.position);
+    qiu1.updateMorphTargets();
+    qiu1.morphTargetInfluences[0] = 1;
+
+    const targets = {
+      width: 0,
+    };
+    anime({
+      targets,
+      width: 1,
+      duration: 500,
+      easing: 'linear',
+      direction: 'alternate',
+      loop: -1,
+      update() {
+        qiu1.morphTargetInfluences[0] = targets.width;
+      },
     });
 
     qiu1GLTF.scene.position.set(0, 1, 0);

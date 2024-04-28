@@ -81,11 +81,11 @@ const initData = async () => {
       roughness: 0.05,
       color: '#06f',
     });
-    const boxMesh = new Mesh(boxGeometry, boxMaterial);
-    boxMesh.position.y = 1;
-    boxMesh.castShadow = true;
-    mainModel = boxMesh;
-    scene.add(boxMesh);
+    const box = new Mesh(boxGeometry, boxMaterial);
+    box.position.y = 1;
+    box.castShadow = true;
+    mainModel = box;
+    scene.add(box);
 
     // animate
     const animate = () => {

@@ -1,0 +1,84 @@
+.big-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  color: #fff;
+  pointer-events: none;
+  .header {
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  .main {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    .left,
+    .right {
+      .city-info {
+        width: 10rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: linear-gradient(#06f, #9198e5);
+        box-shadow: 0 0 20px #9198e5;
+        border-radius: 0.5rem;
+        .city-info-label {
+          font-size: 1rem;
+        }
+        .city-info-value {
+          font-weight: bold;
+          font-size: 1.2rem;
+          display: flex;
+          justify-content: space-between;
+          .left {
+            flex: 1;
+            word-break: break-all;
+          }
+          .right {
+            display: flex;
+            justify-content: flex-end;
+            flex: none;
+            .separator {
+              margin: 0 0.25rem;
+            }
+          }
+        }
+      }
+      .city-event {
+        width: 10rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: linear-gradient(#06f, #9198e5);
+        box-shadow: 0 0 20px #9198e5;
+        border-radius: 0.5rem;
+        transition: all 0.3s;
+        cursor: pointer;
+        pointer-events: all;
+        &.active {
+          box-shadow: 0 0 0 6px #fff;
+        }
+        .city-event-label {
+          display: flex;
+          margin-bottom: 0.25rem;
+          font-size: 1rem;
+          .icon {
+            width: 25px;
+            height: 25px;
+            margin-right: 0.25rem;
+          }
+        }
+        .city-event-date {
+          margin-bottom: 0.25rem;
+          font-size: 0.75rem;
+        }
+        .city-event-summary {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}

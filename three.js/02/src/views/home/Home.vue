@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import SmartCity from '@/components/smart-city/SmartCity.vue';
+import SmartCity2 from '@/components/smart-city2/SmartCity2.vue';
 </script>
 
 <template>
   <div>
-    <SmartCity />
+    <SmartCity2 />
   </div>
 </template>
 

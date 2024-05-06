@@ -1,0 +1,14 @@
+# This is an Asset Catalog Definition file for Blender.
+#
+# Empty lines and lines starting with `#` will be ignored.
+# The first non-ignored line should be the version indicator.
+# Other lines are of the format "UUID:catalog/path/for/assets:simple catalog name"
+
+VERSION 1
+
+1589c3a4-f7b1-4ea2-af51-68a2c7051af0:目录:目录
+e49e8163-ce1a-43ab-89ce-5d9581637899:目录.001:目录.001
+1aa31383-7d5d-46e9-840c-bfb89287cd36:目录.002:目录.002
+c3916c74-f7d2-43a2-81f5-ce66b681e60a:目录.003:目录.003
+85445dee-8c4d-4c19-8e84-1e42b2c65370:目录.004:目录.004
+49cb5ba5-da28-460b-867e-fed18685a542:目录.005:目录.005

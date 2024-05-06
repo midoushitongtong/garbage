@@ -1,0 +1,64 @@
+.big-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  color: #fff;
+  pointer-events: none;
+  .header {
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  .main {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    .left,
+    .right {
+      .city-event {
+        width: 10rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: linear-gradient(#06f, #9198e5);
+        box-shadow: 0 0 10px #9198e5;
+        border-radius: 0.5rem;
+        transition: all 0.3s;
+        cursor: pointer;
+        pointer-events: all;
+        &.camera {
+          background: linear-gradient(rgb(255, 81, 0), #e59191);
+          box-shadow: 0 0 10px #e59191;
+        }
+        &.camera-type {
+          background: linear-gradient(rgb(195, 255, 0), #e5c391);
+          box-shadow: 0 0 10px #e5c391;
+        }
+        &.active {
+          box-shadow: 0 0 0 6px #fff;
+        }
+        .city-event-label {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.25rem;
+          font-size: 1rem;
+          .icon {
+            width: 1.35rem;
+            height: 1.35rem;
+            margin-right: 0.25rem;
+          }
+        }
+        .city-event-date {
+          margin-bottom: 0.25rem;
+          font-size: 0.75rem;
+        }
+        .city-event-summary {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}

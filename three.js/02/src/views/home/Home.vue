@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import SmartCity2 from '@/components/smart-city2/SmartCity2.vue';
+// import Cesium from '@/components/cesium/Cesium.vue';
+import Cesium2 from '@/components/cesium/Cesium2.vue';
 </script>
 
 <template>
-  <div>
-    <SmartCity2 />
-  </div>
+  <Cesium2 />
 </template>
 
 <style lang="scss" scoped></style>
+
+<!-- <script setup lang="ts">
+import Meta from '@/components/meta/Meta.vue';
+</script>
+
+<template>
+  <Meta />
+</template>
+
+<style lang="scss" scoped></style> -->

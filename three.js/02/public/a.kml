@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>My Data</name>
+    
+    <!-- 点 -->
+    <Placemark>
+      <name>Point 1</name>
+      <Point>
+        <coordinates>114.085947,22.547,0</coordinates>
+      </Point>
+    </Placemark>
+    
+    <!-- 线 -->
+    <Placemark>
+      <name>Line 1</name>
+      <LineString>
+        <coordinates>114.085947,22.547,0 115.085947,23.547,0 116.085947,24.547,0</coordinates>
+      </LineString>
+    </Placemark>
+    
+    <!-- 面 -->
+    <Placemark>
+      <name>Polygon 1</name>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>114.085947,22.547,0 114.085947,22.547,0 114.085947,22.547,0 114.085947,22.547,0 114.085947,22.547,0</coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    
+  </Document>
+</kml>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import Cesium from '@/components/cesium/Cesium.vue';
 import Cesium2 from '@/components/cesium/Cesium2.vue';
 </script>
 
@@ -8,13 +7,3 @@ import Cesium2 from '@/components/cesium/Cesium2.vue';
 </template>
 
 <style lang="scss" scoped></style>
-
-<!-- <script setup lang="ts">
-import Meta from '@/components/meta/Meta.vue';
-</script>
-
-<template>
-  <Meta />
-</template>
-
-<style lang="scss" scoped></style> -->

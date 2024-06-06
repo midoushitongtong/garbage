@@ -13,15 +13,16 @@ const Container = styled.section`
   }
 `;
 
+// @ts-ignore
 Promise.myAll = function (promiseList) {
-  let resolve;
-  let reject;
+  let resolve: any;
+  let reject: any;
   const p = new Promise((res, rej) => {
     resolve = res;
     reject = rej;
   });
 
-  const resultList = [];
+  const resultList: any = [];
   let count = 0;
   let fullfiledCount = 0;
   for (const promise of promiseList) {
@@ -41,6 +42,7 @@ Promise.myAll = function (promiseList) {
   return p;
 };
 
+// @ts-ignore
 Promise.myAll([1, 2, 3]).then((res) => {
   console.log(res);
 });

@@ -1,6 +1,5 @@
 'use client';
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
 
 const Container = styled.section`
   display: flex;
@@ -20,7 +19,8 @@ const o = (function () {
     b: 2,
   };
   return {
-    get: function (key) {
+    get: function (key: any) {
+      // @ts-ignore
       return obj[key];
     },
   };
@@ -42,9 +42,10 @@ const o2 = (function () {
     b: 2,
   };
   return {
-    get: function (key) {
+    get: function (key: any) {
       // 判断 obj 自身有没有属性
       if (obj.hasOwnProperty(key)) {
+        // @ts-ignore
         return obj[key];
       }
     },
@@ -59,9 +60,10 @@ const o3 = (function () {
   };
   Object.setPrototypeOf(obj, null);
   return {
-    get: function (key) {
+    get: function (key: any) {
       // 判断 obj 自身有没有属性
       if (obj.hasOwnProperty(key)) {
+        // @ts-ignore
         return obj[key];
       }
     },

@@ -7,25 +7,24 @@ const Container = styled.section`
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  min-height: 100vh;
-  border: 5px solid #06f;
-  border-image: linear-gradient(to right, #b6cb13, #f60) 1;
+  background: linear-gradient(to right, #b6cb13, #f60);
 
-  .content {
-    font-size: 5rem;
-    text-align: center;
+  div {
+    color: #fff;
   }
 `;
 
 const PageContent = () => {
+  const str = '1000000';
   useEffect(() => {
-    console.log('Hello World');
+    console.log(str.replace(/(?=\B(\d{3})+$)/g, ','));
   }, []);
-
   return (
-    <Container>
-      <div className="content">Hello World</div>
-    </Container>
+    <>
+      <Container className="container">
+        <div>Hello World</div>
+      </Container>
+    </>
   );
 };
 

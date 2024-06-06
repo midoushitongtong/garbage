@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "env-cmd -f ./.env.development next dev",
+    "build-uat": "env-cmd -f ./.env.uat next build",
+    "build-production": "env-cmd -f ./.env.production next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier-fix": "prettier --write ."
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -15,7 +17,10 @@
     "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.16",
     "@mui/material-nextjs": "^5.15.11",
+    "@react-spring/web": "^9.7.3",
     "axios": "^1.6.8",
+    "colorthief": "^2.4.0",
+    "gsap": "^3.12.5",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
@@ -24,6 +29,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "env-cmd": "^10.1.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "eslint-config-prettier": "^9.1.0",

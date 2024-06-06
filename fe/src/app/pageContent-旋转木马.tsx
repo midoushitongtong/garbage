@@ -70,8 +70,11 @@ const PageContent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const items = containerRef.current?.querySelectorAll('.content .item');
-    const radius = containerRef.current?.querySelector('.content').clientWidth / 2;
+    if (!containerRef.current) {
+      return;
+    }
+    const items = [...containerRef.current?.querySelectorAll('.content .item')] as HTMLDivElement[];
+    const radius = (containerRef.current?.querySelector('.content')?.clientWidth || 0) / 2;
     const pieceDeg = 360 / items?.length;
 
     for (let i = 0; i < items?.length; i++) {

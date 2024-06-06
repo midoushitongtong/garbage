@@ -21,6 +21,7 @@ const PageContent = () => {
       b: 2,
     };
 
+    // @ts-ignore
     Object.prototype.c = function () {
       console.log('c');
     };

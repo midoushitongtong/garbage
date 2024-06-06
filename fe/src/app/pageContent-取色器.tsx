@@ -1,11 +1,8 @@
 'use client';
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Container = styled.section`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 1rem;
   min-height: 100vh;
   border: 5px solid #06f;
@@ -18,13 +15,25 @@ const Container = styled.section`
 `;
 
 const PageContent = () => {
+  const [curr, setCurr] = useState();
   useEffect(() => {
     console.log('Hello World');
   }, []);
 
   return (
-    <Container>
+    <Container className="container">
       <div className="content">Hello World</div>
+      <div>{curr}</div>
+      <button
+        onClick={async () => {
+          // @ts-ignore
+          const eyeDropper = new EyeDropper();
+          const result = await eyeDropper.open();
+          setCurr(result.sRGBHex);
+        }}
+      >
+        取色
+      </button>
     </Container>
   );
 };

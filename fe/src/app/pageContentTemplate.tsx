@@ -6,6 +6,7 @@ const Container = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   padding: 1rem;
   min-height: 100vh;
   border: 5px solid #06f;

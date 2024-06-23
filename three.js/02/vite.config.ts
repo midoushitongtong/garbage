@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 import glsl from 'vite-plugin-glsl';
+import AutoImport from 'unplugin-auto-import/vite';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -11,6 +12,11 @@ export default defineConfig({
     vue(),
     glsl(),
     // VueDevTools(),
+    AutoImport({
+      imports: ['vue', 'vue-router'],
+      dirs: ['./src/apis/**'],
+      dts: './auto-import.d.ts',
+    }),
   ],
   resolve: {
     alias: {

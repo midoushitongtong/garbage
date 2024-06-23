@@ -30,3 +30,5 @@ coverage
 *.tsbuildinfo
 
 .history
+
+auto-import.d.ts

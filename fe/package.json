@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "env-cmd -f ./.env.development next dev",
-    "build-uat": "env-cmd -f ./.env.uat next build",
-    "build-production": "env-cmd -f ./.env.production next build",
+    "dev": "pnpm run setup && env-cmd -f ./.env.development next dev",
+    "build-uat": "pnpm run setup && env-cmd -f ./.env.uat next build",
+    "build-production": "pnpm run setup && env-cmd -f ./.env.production next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier-fix": "prettier --write ."
+    "prettier-fix": "prettier --write .",
+    "setup": "tsx scripts/generate-dns-prefetch-domain.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -23,12 +24,14 @@
     "gsap": "^3.12.5",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "env-cmd": "^10.1.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
@@ -36,6 +39,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.2.5",
     "sass": "^1.76.0",
+    "tsx": "^4.12.0",
     "typescript": "^5"
   }
 }

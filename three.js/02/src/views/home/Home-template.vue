@@ -14,7 +14,6 @@ import {
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-import { onMounted, onUnmounted, ref } from 'vue';
 
 const containerRef = ref<HTMLDivElement>();
 let requestAnimationFrameId: number | undefined = undefined;

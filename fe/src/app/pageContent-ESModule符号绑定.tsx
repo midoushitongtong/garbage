@@ -1,8 +1,13 @@
 'use client';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
+import { counter, increase } from './pageContent-ESModule符号绑定.mjs';
 
 const Container = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: 1rem;
   min-height: 100vh;
   border: 5px solid #06f;
@@ -14,15 +19,14 @@ const Container = styled.section`
   }
 `;
 
+console.log(counter);
+increase();
+console.log(counter);
+
 /**
- * 什么是响应式：
- * 响应式是数据与函数的关联，当某个数据发生改变，会自动重新执行依赖此数据的函数
- * - watch
- * - watchEffect
- * - computed
- * - render
- * - useEffect
- * 以上 api 都有一个共有的特性，就是函数运行的期间会使用到响应式数据，那么后续这些响应式数据发生改变就会重新运行函数
+ * ES Module 中的符号绑定
+ * 在 ES Module 中导入和导出的变量，都是共用同一块内存空间
+ * 所以我们在导出的时候，为了减少不可预测的情况，导出的数据最好设置为常量，防止外部进行修改
  */
 
 const PageContent = () => {
@@ -31,7 +35,7 @@ const PageContent = () => {
   }, []);
 
   return (
-    <Container className="container">
+    <Container>
       <div className="content">Hello World</div>
     </Container>
   );

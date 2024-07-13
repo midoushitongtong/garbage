@@ -3,6 +3,10 @@ import styled from '@emotion/styled';
 import { useEffect } from 'react';
 
 const Container = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: 1rem;
   min-height: 100vh;
   border: 5px solid #06f;
@@ -14,15 +18,18 @@ const Container = styled.section`
   }
 `;
 
+const arr = [{ n: 1 }];
+console.log(arr);
+arr[0].n++;
+console.log(arr);
+
 /**
- * 什么是响应式：
- * 响应式是数据与函数的关联，当某个数据发生改变，会自动重新执行依赖此数据的函数
- * - watch
- * - watchEffect
- * - computed
- * - render
- * - useEffect
- * 以上 api 都有一个共有的特性，就是函数运行的期间会使用到响应式数据，那么后续这些响应式数据发生改变就会重新运行函数
+ * 会发现控制台两次打印的结果相同
+ * 是因为chrome只有在真正读取对象内容的时候才会从内存中读取数据
+ * 两个对象用的同一块内存空间，就会导致打印的结果相同
+ *
+ * 解决方法: 使用 debugger 或者 JSON.stringify() 转为字符串
+ *
  */
 
 const PageContent = () => {
@@ -31,7 +38,7 @@ const PageContent = () => {
   }, []);
 
   return (
-    <Container className="container">
+    <Container>
       <div className="content">Hello World</div>
     </Container>
   );

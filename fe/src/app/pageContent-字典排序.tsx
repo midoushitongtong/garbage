@@ -3,6 +3,10 @@ import styled from '@emotion/styled';
 import { useEffect } from 'react';
 
 const Container = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: 1rem;
   min-height: 100vh;
   border: 5px solid #06f;
@@ -14,16 +18,10 @@ const Container = styled.section`
   }
 `;
 
-/**
- * 什么是响应式：
- * 响应式是数据与函数的关联，当某个数据发生改变，会自动重新执行依赖此数据的函数
- * - watch
- * - watchEffect
- * - computed
- * - render
- * - useEffect
- * 以上 api 都有一个共有的特性，就是函数运行的期间会使用到响应式数据，那么后续这些响应式数据发生改变就会重新运行函数
- */
+const names = ['上海', '北京', '广东'];
+
+// 按照字典顺序进行排序，而不是用编码顺序
+console.log(names.sort((a, b) => a.localeCompare(b)));
 
 const PageContent = () => {
   useEffect(() => {
@@ -31,7 +29,7 @@ const PageContent = () => {
   }, []);
 
   return (
-    <Container className="container">
+    <Container>
       <div className="content">Hello World</div>
     </Container>
   );

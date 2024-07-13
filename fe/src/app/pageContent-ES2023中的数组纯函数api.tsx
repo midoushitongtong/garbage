@@ -3,6 +3,10 @@ import styled from '@emotion/styled';
 import { useEffect } from 'react';
 
 const Container = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: 1rem;
   min-height: 100vh;
   border: 5px solid #06f;
@@ -14,16 +18,15 @@ const Container = styled.section`
   }
 `;
 
-/**
- * 什么是响应式：
- * 响应式是数据与函数的关联，当某个数据发生改变，会自动重新执行依赖此数据的函数
- * - watch
- * - watchEffect
- * - computed
- * - render
- * - useEffect
- * 以上 api 都有一个共有的特性，就是函数运行的期间会使用到响应式数据，那么后续这些响应式数据发生改变就会重新运行函数
- */
+const arr = [3, 2, 1];
+
+// ES2023 中的数组的纯函数api
+console.log(arr.toSorted()); // 排序
+console.log(arr.toReversed()); // 反转
+console.log(arr.toSpliced(0, 1, 10)); // 替换数组中的某几项
+console.log(arr.with(0, 10)); // 修改数组中的某一项
+
+console.log(arr);
 
 const PageContent = () => {
   useEffect(() => {
@@ -31,7 +34,7 @@ const PageContent = () => {
   }, []);
 
   return (
-    <Container className="container">
+    <Container>
       <div className="content">Hello World</div>
     </Container>
   );

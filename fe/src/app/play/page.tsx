@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import PageContent from './pageContent';
 
 export const generateMetadata = () => {
@@ -7,7 +8,11 @@ export const generateMetadata = () => {
 };
 
 const Page = () => {
-  return <PageContent />;
+  return (
+    <Suspense>
+      <PageContent />
+    </Suspense>
+  );
 };
 
 export default Page;

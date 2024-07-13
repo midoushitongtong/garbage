@@ -2,7 +2,7 @@
 import styled from '@emotion/styled';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useBroadcastChannel } from '../pageContent-夸标签通信';
+import { useBroadcastChannel } from '../pageContent-跨标签通信';
 
 const Container = styled.section`
   display: flex;

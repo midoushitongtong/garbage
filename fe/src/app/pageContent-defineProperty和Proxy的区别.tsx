@@ -17,6 +17,12 @@ const Container = styled.section`
   }
 `;
 
+/**
+ * Proxy 和 defineProperty 的区别
+ * - defineProperty 只能提供 get 和 set，proxy 能提供新增属性，删除属性的监听
+ * - defineProperty 只是对象的基本方法只一, proxy 可以拦截所有的基本方法, 这个是主要的区别
+ */
+
 const PageContent = () => {
   // useEffect(() => {
   //   function isObject(value: any) {

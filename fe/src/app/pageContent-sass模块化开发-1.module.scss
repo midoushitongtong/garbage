@@ -1,0 +1,5 @@
+@use './pageContent-sass模块化开发-2.scss' as var;
+
+.container {
+  background-color: var.$background-color;
+}

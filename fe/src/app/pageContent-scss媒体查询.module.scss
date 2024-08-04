@@ -1,0 +1,27 @@
+@mixin deviceType($deviceType) {
+  @if ($deviceType == 'desktop') {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  } @else if ($deviceType == 'tablet') {
+    @media (min-width: 768px) and (max-width: 1199px) {
+      @content;
+    }
+  } @else if ($deviceType == 'mobile') {
+    @media (max-width: 767px) {
+      @content;
+    }
+  }
+}
+
+.content {
+  @include deviceType('desktop') {
+    font-size: 10rem;
+  }
+  @include deviceType('tablet') {
+    font-size: 5rem;
+  }
+  @include deviceType('mobile') {
+    font-size: 2.5rem;
+  }
+}

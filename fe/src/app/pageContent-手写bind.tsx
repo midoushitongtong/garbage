@@ -18,32 +18,32 @@ const Container = styled.section`
   }
 `;
 
-function test(a: any, b: any, c: any) {
+function fn(a: any, b: any, c: any, d: any) {
+  console.log('fn called');
+  console.log('args', a, b, c, d);
   // @ts-ignore
-  console.log(a, b, c, this.d);
+  console.log('this', this);
+  return 5;
 }
 
 // @ts-ignore
-Function.prototype.myCall = function (ctx, ...args) {
-  // 1. null 和 undefined ctx 指向 globalThis
-  // 2. 其他类型需要转为相应的包装类
-  ctx = ctx === null || ctx === undefined ? globalThis : Object(ctx);
-
+Function.prototype.myBind = function (ctx, ...args) {
   const fn = this;
-  const key = Symbol(); // 用 symbol 作为 key 防止覆盖原对象的属性
-  Object.defineProperty(ctx, key, {
-    value: fn,
-    enumerable: false,
-    configurable: true,
-  });
-  const result = ctx[key](...args);
-  return result;
-  // return fn.apply(ctx, args);
+  return function (...subArgs: any) {
+    const allArgs = [...args, ...subArgs];
+    // 判断是否通过 new 创建, 如果是则通过原方法创建对象
+    if (new.target) {
+      // @ts-ignore
+      return new fn(...allArgs);
+    } else {
+      return fn.call(ctx, ...allArgs);
+    }
+  };
 };
 
-const obj = { d: 4 };
+const bindFn = fn.bind({ name: 123 }, 1, 2);
 // @ts-ignore
-test.myCall(obj, 1, 2, 3);
+console.log(bindFn(3, 4));
 
 const PageContent = () => {
   useEffect(() => {

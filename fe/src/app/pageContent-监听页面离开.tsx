@@ -1,41 +1,57 @@
 'use client';
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Container = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   padding: 1rem;
-  background: linear-gradient(to right, #b6cb13, #f60);
+  min-height: 100vh;
+  border: 5px solid #06f;
+  border-image: linear-gradient(to right, #b6cb13, #f60) 1;
 
-  div {
-    color: #fff;
+  .content {
+    font-size: 5rem;
+    text-align: center;
   }
 `;
 
-const PageContent = () => {
-  console.log(1);
+const useVisibility = () => {
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handle = () => {
-    if (document.visibilityState === 'visible') {
-      console.log('页面可见');
-    } else {
-      console.log('页面隐藏');
-    }
-  };
   useEffect(() => {
-    document.addEventListener('visibilitychange', handle);
-    return () => {
-      document.removeEventListener('visibilitychange', handle);
+    const handleVisibilityChange = () => {
+      setIsVisible(document.visibilityState === 'visible');
     };
-  });
+
+    // 如果打开了 f12 则不会触发此事件的执行
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  return isVisible;
+};
+
+const PageContent = () => {
+  const visibility = useVisibility();
+
+  useEffect(() => {
+    console.log('Hello World');
+  }, []);
+
+  useEffect(() => {
+    console.log('visibility:', visibility);
+  }, [visibility]);
+
   return (
-    <>
-      <Container className="container">
-        <div>Hello World</div>
-      </Container>
-    </>
+    <Container>
+      <div className="content">Hello World</div>
+    </Container>
   );
 };
 

@@ -18,32 +18,15 @@ const Container = styled.section`
   }
 `;
 
-function test(a: any, b: any, c: any) {
-  // @ts-ignore
-  console.log(a, b, c, this.d);
-}
+var a = { n: 1 };
+var b = a;
+// @ts-ignore
+a.x = a = { n: 2 };
 
 // @ts-ignore
-Function.prototype.myCall = function (ctx, ...args) {
-  // 1. null 和 undefined ctx 指向 globalThis
-  // 2. 其他类型需要转为相应的包装类
-  ctx = ctx === null || ctx === undefined ? globalThis : Object(ctx);
-
-  const fn = this;
-  const key = Symbol(); // 用 symbol 作为 key 防止覆盖原对象的属性
-  Object.defineProperty(ctx, key, {
-    value: fn,
-    enumerable: false,
-    configurable: true,
-  });
-  const result = ctx[key](...args);
-  return result;
-  // return fn.apply(ctx, args);
-};
-
-const obj = { d: 4 };
+console.log(a.x); // undefined
 // @ts-ignore
-test.myCall(obj, 1, 2, 3);
+console.log(b.x); // { n: 2 }
 
 const PageContent = () => {
   useEffect(() => {

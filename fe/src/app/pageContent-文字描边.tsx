@@ -10,8 +10,18 @@ const Container = styled.section`
   background: linear-gradient(to right, #b6cb13, #f60);
 
   div {
-    color: transparent;
-    -webkit-text-stroke: 2px #fff;
+    /* color: transparent; */
+    -webkit-text-stroke: 4px #fff;
+    position: relative;
+
+    // 利用伪类解决描边占据原有字体大小的问题
+    &::after {
+      content: attr(data-content);
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-text-stroke: 0;
+    }
   }
 `;
 
@@ -19,7 +29,7 @@ const PageContent = () => {
   return (
     <>
       <Container className="container">
-        <div>Hello World</div>
+        <div data-content="Hello World">Hello World</div>
       </Container>
     </>
   );

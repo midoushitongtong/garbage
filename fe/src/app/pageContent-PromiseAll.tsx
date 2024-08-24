@@ -29,8 +29,10 @@ Promise.myAll = function (promiseList) {
     const i = count;
     count++;
     Promise.resolve(promise).then((result) => {
+      // 根据 index 收集 promise 的结果
       resultList[i] = result;
       fullfiledCount++;
+      // 如果全部 promise 完成, 就执行 resolve
       if (fullfiledCount === count) {
         resolve(resultList);
       }

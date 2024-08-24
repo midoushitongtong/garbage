@@ -14,6 +14,7 @@ const Container = styled.section`
     overflow-y: auto;
     margin: 10px;
     padding: 10px;
+    transform: scale(1.5);
   }
 `;
 
@@ -32,11 +33,11 @@ const PageContent = () => {
     console.log(content.offsetWidth);
     console.log(content.offsetHeight);
 
-    console.log('整个内容的尺寸, 包含滚动条');
+    console.log('整个内容的尺寸, 包含滚动条, 不包含边框');
     console.log(content.scrollWidth);
     console.log(content.scrollHeight);
 
-    console.log('包含边框的尺寸, getBoundingClientRect');
+    console.log('获取变换后的尺寸 transform: scale(1) 用户真正看到的尺寸');
     console.log(content.getBoundingClientRect());
   }, []);
 

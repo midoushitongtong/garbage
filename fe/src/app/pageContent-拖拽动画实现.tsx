@@ -41,6 +41,7 @@ const PageContent = () => {
       return;
     }
     let sourceElement: HTMLDivElement;
+    // 利用 FLIP 思想，可以解决元素结构变化的动画
     let flip: ReturnType<typeof Flip>;
 
     const _handleDragStart = (e: DragEvent) => {

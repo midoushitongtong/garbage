@@ -14,7 +14,6 @@ const Container = styled.section`
     &:hover {
       .front {
         transform: rotateY(-180deg);
-        backface-visibility: hidden;
       }
       .back {
         transform: rotateY(0);
@@ -32,6 +31,7 @@ const Container = styled.section`
       height: 100%;
       color: #fff;
       transition: all 1s ease;
+      backface-visibility: hidden;
     }
     .front {
       background: #06f;
@@ -39,7 +39,6 @@ const Container = styled.section`
     .back {
       background: #f60;
       transform: rotateY(180deg);
-      backface-visibility: hidden;
     }
   }
 `;

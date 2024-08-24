@@ -26,7 +26,7 @@ const Container = styled.section`
   // 使用 aspect-radio 实现宽高比
   .container-2 {
     background-color: #06f;
-    aspect-ratio: 2/1;
+    aspect-ratio: 2 / 1;
   }
 `;
 

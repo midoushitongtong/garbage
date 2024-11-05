@@ -11,39 +11,29 @@ const Container = styled.section`
   min-height: 100vh;
   border: 5px solid #06f;
   border-image: linear-gradient(to right, #b6cb13, #f60) 1;
+  background-color: #f6f6f6;
 
   .content {
+    position: relative;
     font-size: 5rem;
     text-align: center;
+    z-index: 0;
+    &::after {
+      content: 'Hello World';
+      position: absolute;
+      left: 0;
+      color: #000;
+      transform: translate(-35px, 10px) scaleY(0.5) skew(35deg);
+      z-index: -1;
+      filter: blur(5px);
+      -webkit-mask: linear-gradient(transparent 1%, #000);
+    }
   }
 `;
 
 const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
-
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
-
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
-    };
-
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
   }, []);
 
   return (

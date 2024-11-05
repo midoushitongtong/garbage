@@ -1,62 +1,68 @@
 'use client';
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 
 const Container = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   padding: 1rem;
+  min-height: 100vh;
+  border: 5px solid #06f;
+  border-image: linear-gradient(to right, #b6cb13, #f60) 1;
 
-  div {
+  .content {
+    overflow: hidden;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 200px;
     height: 100px;
-    border-radius: 20px;
-    color: #fff;
-    background-color: #000;
-    overflow: hidden;
+    background-color: #ccc;
+    border-radius: 10px;
     z-index: 1;
     &::before {
+      z-index: -1;
       content: '';
       position: absolute;
       top: 50%;
       left: 50%;
       width: 200%;
       height: 200%;
-      z-index: -1;
-      background-color: #f60;
-      animation: rotate 3s infinite linear;
+      background-color: #06f;
       transform-origin: 0 0;
-      @keyframes rotate {
-        to {
-          transform: rotate(1turn);
+      animation: contentBeforeAnimation 1.5s linear infinite;
+      @keyframes contentBeforeAnimation {
+        100% {
+          transform: rotate(360deg);
         }
       }
     }
     &::after {
-      content: '';
       z-index: -1;
+      content: '';
       position: absolute;
-      background-color: #000;
+      top: 2px;
+      left: 2px;
       width: calc(100% - 4px);
       height: calc(100% - 4px);
-      left: 2px;
-      right: 2px;
-      border-radius: 20px;
+      border-radius: 10px;
+      background-color: #f60;
     }
   }
 `;
 
 const PageContent = () => {
+  useEffect(() => {
+    console.log('Hello World');
+  }, []);
+
   return (
-    <>
-      <Container className="container">
-        <div>Hello World</div>
-      </Container>
-    </>
+    <Container>
+      <div className="content">Hello World</div>
+    </Container>
   );
 };
 

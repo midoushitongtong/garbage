@@ -18,32 +18,16 @@ const Container = styled.section`
   }
 `;
 
+// 在 JS 的历史中, 有些看起来是相同的场景, 实际上确是不同的, 例如
+// @ts-ignore
+console.log(NaN === NaN); // false, 实际上这两个是相同的
+console.log(Object.is(NaN, NaN)); // true, 为了解决这个问题, 引入了 Object.is
+console.log(-0 === +0); // true, 实际上这两个是不同的
+console.log(Object.is(-0, +0)); // false, 为了解决这个问题, 引入了 Object.is
+
 const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
-
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
-
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
-    };
-
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
   }, []);
 
   return (

@@ -18,32 +18,23 @@ const Container = styled.section`
   }
 `;
 
+// 函数签名
+// 函数签名 = 函数名 + 参数 + 返回值
+// 函数签名的重要性: 用来引导函数的具体实现
+// 函数签名的作用: 降低调用者的心智负担, 调用者只需要知道函数名 + 参数 + 返回值就可以, 不需要知道里面的具体实现
+
+/**
+ * 判断一个数是不是偶数 (函数名)
+ *
+ * @param value (参数)
+ */
+function isEven(value: number) {
+  return value % 2 === 0; // (返回值)
+}
+
 const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
-
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
-
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
-    };
-
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
   }, []);
 
   return (

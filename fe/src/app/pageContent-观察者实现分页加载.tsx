@@ -28,7 +28,7 @@ const PageContent = () => {
         }
       },
       {
-        threshold: 0.1, // 重叠 10% 就触发
+        threshold: 0.5, // 元素 50% 可见就触发
       }
     );
 

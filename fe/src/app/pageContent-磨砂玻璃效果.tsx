@@ -13,25 +13,33 @@ const Container = styled.section`
   border-image: linear-gradient(to right, #b6cb13, #f60) 1;
 
   .content {
-    font-size: 5rem;
+    position: relative;
+    width: 100%;
+    height: 300px;
     text-align: center;
+    font-size: 5rem;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(5px);
+      transition: all 1s;
+    }
+    &:hover {
+      &::after {
+        width: 0;
+      }
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 `;
-
-const fibonacci = (n: number) => {
-  if (n === 1 || n === 2) {
-    return 1;
-  }
-  let p1 = 1;
-  let p2 = 1;
-  let r;
-  for (let i = 2; i < n; i++) {
-    r = p1 + p2;
-    p1 = p2;
-    p2 = r;
-  }
-  return r;
-};
 
 const PageContent = () => {
   useEffect(() => {
@@ -40,7 +48,9 @@ const PageContent = () => {
 
   return (
     <Container>
-      <div className="content">Hello World</div>
+      <div className="content">
+        <img src="/1.jpeg" />
+      </div>
     </Container>
   );
 };

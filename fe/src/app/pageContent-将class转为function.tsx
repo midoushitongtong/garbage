@@ -36,7 +36,8 @@ function Example2(name: string) {
   // 防止直接调用函数, 必须要通过 new 创建对象, 如果直接调用函数需要抛出错误
   // Example2('1');
   // @ts-ignore
-  if (!(this instanceof Example2)) {
+  // if (!(this instanceof Example2)) {
+  if (!new.target) {
     // eslint-disable-next-line quotes
     throw new TypeError("Class constructor Example cannot be invoked without 'new'");
   }
@@ -51,7 +52,8 @@ Object.defineProperty(Example2.prototype, 'func', {
     // const e2 = new Example2('1');
     // new e2.func();
     // @ts-ignore
-    if (!(this instanceof Example2)) {
+    // if (!(this instanceof Example2)) {
+    if (new.target) {
       // eslint-disable-next-line quotes
       throw new TypeError("Class constructor Example cannot be invoked without 'new'");
     }

@@ -20,30 +20,25 @@ const Container = styled.section`
 
 const PageContent = () => {
   useEffect(() => {
-    console.log('Hello World');
+    const arr = [1, 2, 3, 4, 5, 6];
 
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
+    let sumData = 0;
+    for (let i = 0; i < arr.length; i++) {
+      sumData += arr[i];
+    }
+    console.log(sumData);
 
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
+    // 循环转递归
+    const sum = (arr: number[], index = 0): number => {
+      // 递归终止条件
+      if (index >= arr.length) {
+        return 0;
+      }
+      // 逻辑代码
+      return arr[index] + sum(arr, index + 1);
     };
 
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
+    console.log(sum(arr));
   }, []);
 
   return (

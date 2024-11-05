@@ -11,36 +11,45 @@ const Container = styled.section`
   min-height: 100vh;
   border: 5px solid #06f;
   border-image: linear-gradient(to right, #b6cb13, #f60) 1;
+  background-color: #333;
 
   .content {
     font-size: 5rem;
     text-align: center;
+    color: #06f;
+    span {
+      animation: colorChange 0s infinite alternate;
+      @keyframes colorChange {
+        100% {
+          color: #f60;
+        }
+      }
+    }
   }
 `;
-
-const fibonacci = (n: number) => {
-  if (n === 1 || n === 2) {
-    return 1;
-  }
-  let p1 = 1;
-  let p2 = 1;
-  let r;
-  for (let i = 2; i < n; i++) {
-    r = p1 + p2;
-    p1 = p2;
-    p2 = r;
-  }
-  return r;
-};
 
 const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
   }, []);
 
+  const str = 'Hello World';
+
   return (
     <Container>
-      <div className="content">Hello World</div>
+      <div className="content">
+        {str.split('').map((item, index) => (
+          <span
+            key={index}
+            style={{
+              animationDuration: `${str.length * 0.1}s`,
+              animationDelay: `${index * 0.1}s`,
+            }}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
     </Container>
   );
 };

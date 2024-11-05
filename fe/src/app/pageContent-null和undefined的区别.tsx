@@ -18,32 +18,13 @@ const Container = styled.section`
   }
 `;
 
+// null 和 undefined 的区别
+// null 表示一个空值, 声明了变量并且赋值为空
+// undefined 表示一个未定义的值, 声明了变量但是没有赋值
+
 const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
-
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
-
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
-    };
-
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
   }, []);
 
   return (

@@ -18,32 +18,23 @@ const Container = styled.section`
   }
 `;
 
+// parseInt 和 Math.floor 的区别
+
+// 在正数的情况下，结果都是一样的
+console.log(parseInt('1.1')); // 1
+console.log(Math.floor(Number('1.1'))); // 1
+
+// 在负数的情况下，结果是不一样的
+// 负数的情况下, parseInt 会上取整
+console.log(parseInt('-1.1')); // -1
+// 负数的情况下, Math.floor 会向下取整
+console.log(Math.floor(Number('-1.1'))); // -2
+// 负数的情况下, Math.floor 会向下取整
+console.log(Math.round(Number('-1.6'))); // -2
+
 const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
-
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
-
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
-    };
-
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
   }, []);
 
   return (

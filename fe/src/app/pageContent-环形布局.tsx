@@ -47,8 +47,17 @@ const Container = styled.section`
       background: #fff;
       transform: translate(-50%, -50%);
     }
-    .item-list {
-      .item {
+    animation: contentRotateAnimation 10s linear infinite;
+    @keyframes contentRotateAnimation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .list {
+      .list-item {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -64,6 +73,17 @@ const Container = styled.section`
         border-radius: 50%;
         color: #fff;
         ${generateItemStyle()}
+        .list-item-content {
+          animation: listItemContentAnimation 10s linear infinite;
+          @keyframes listItemContentAnimation {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(-360deg);
+            }
+          }
+        }
       }
     }
   }
@@ -78,13 +98,25 @@ const PageContent = () => {
     <Container>
       <div className="content">
         <div className="inner"></div>
-        <div className="item-list">
-          <div className="item">1</div>
-          <div className="item">2</div>
-          <div className="item">3</div>
-          <div className="item">4</div>
-          <div className="item">5</div>
-          <div className="item">6</div>
+        <div className="list">
+          <div className="list-item">
+            <div className="list-item-content">1</div>
+          </div>
+          <div className="list-item">
+            <div className="list-item-content">2</div>
+          </div>
+          <div className="list-item">
+            <div className="list-item-content">3</div>
+          </div>
+          <div className="list-item">
+            <div className="list-item-content">4</div>
+          </div>
+          <div className="list-item">
+            <div className="list-item-content">5</div>
+          </div>
+          <div className="list-item">
+            <div className="list-item-content">6</div>
+          </div>
         </div>
       </div>
     </Container>

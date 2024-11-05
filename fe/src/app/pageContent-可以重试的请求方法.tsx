@@ -19,13 +19,11 @@ const Container = styled.section`
 `;
 
 // 可以重试的请求方法
-function request(url: string, maxCount = 5): Promise<any> {
-  return fetch(url).catch((error: any) => {
-    return maxCount <= 0 ? Promise.reject(error) : request(url, maxCount - 1);
-  });
-}
+const request = (url: string, maxCount = 5): Promise<Response> => {
+  return fetch(url).catch((err) => (maxCount <= 0 ? Promise.reject(err) : request(url, maxCount - 1)));
+};
 
-request('https://qwerty.com')
+request('https://aaaaaaaaaabbbbbbbbb.com')
   .then((result) => {
     console.log(result);
   })

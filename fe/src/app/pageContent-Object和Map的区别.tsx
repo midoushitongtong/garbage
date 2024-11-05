@@ -18,32 +18,24 @@ const Container = styled.section`
   }
 `;
 
+/**
+ * {} 和 new Map
+ * 普通对象 和 Map 的区别
+ *
+ * 1. Object 的 key 只能是字符串或者Symbol, 当 key 的类型不是这两者的情况下会转换为字符串
+ * 2. Object 的 key 是无序的
+ *    Map 的 key 是有序的
+ *    Map 的 key 可以是任意类型
+ * 3. Object 继承与 Object.prototype 会携带 Object 上的默认方法和属性
+ *    Map 没有继承 Object.prototype
+ * 4. 操作方式不同
+ *    Object 的增删改查都是使用简单的赋值
+ *    Map 提供的专门的方法 set, get, has, delete
+ */
+
 const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
-
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
-
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
-    };
-
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
   }, []);
 
   return (

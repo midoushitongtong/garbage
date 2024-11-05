@@ -22,33 +22,26 @@ const PageContent = () => {
   useEffect(() => {
     console.log('Hello World');
 
-    // 使用生成器实现
-    // Object.prototype[Symbol.iterator] = function* () {
-    //   for (const value of Object.values(this)) {
-    //     yield value;
-    //   }
-    // };
-
-    // 使用对象值实现
-    // 让 Object 遵循可迭代协议, 以便可以使用 for...of 语句或数组解构赋值
-    // @ts-ignore
-    Object.prototype[Symbol.iterator] = function () {
-      // 返回对象值的迭代器
-      return Object.values(this)[Symbol.iterator]();
-    };
-
-    // @ts-ignore
-    const [a, b] = {
-      a: 3,
-      b: 4,
-    };
-
-    console.log(a, b);
+    setTimeout(() => {
+      // 使用 scrollIntoView 滚动元素到指定区域的好处：
+      // 1. 可以平滑滚动
+      // 2. 不会和 hash 类型的路由产生冲突
+      // 3. 便于使用 js 进行控制
+      document.querySelector('#h-50')?.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    }, 0);
   }, []);
 
   return (
     <Container>
       <div className="content">Hello World</div>
+      {new Array(100).fill(1).map((item, index) => (
+        <h1 key={index} id={`h-${index}`}>
+          {index}
+        </h1>
+      ))}
     </Container>
   );
 };

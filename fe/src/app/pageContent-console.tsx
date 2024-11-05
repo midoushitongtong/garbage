@@ -43,6 +43,8 @@ const Container = styled.section`
 // console.count('123');
 // console.count('123');
 
+// console.dir(document.body);
+
 // function b() {
 //   console.trace();
 // }
@@ -56,7 +58,8 @@ const Container = styled.section`
 // console.warn('123');
 
 // console.log(123);
-// console.clear();
+// console.clear(); // 清空之前的 console
+// console.log(233);
 
 console.log(
   '%c123',

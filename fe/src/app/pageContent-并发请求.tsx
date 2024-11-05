@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 
 const Container = styled.section`
   display: flex;
@@ -13,62 +14,56 @@ const Container = styled.section`
   }
 `;
 
-function concurRequest(urls: string[], concurSize: number) {
-  return new Promise((resolve) => {
-    const results: any[] = [];
-
-    if (urls.length === 0) {
-      resolve(results);
-    }
-
-    let index = 0;
-    let count = 0;
-    async function request() {
-      if (index === urls.length) {
-        return;
-      }
-      const i = index;
-      index++;
-      const url = urls[i];
-      try {
-        const res = await fetch(url);
-        results[i] = await res.json();
-      } catch (err) {
-        results[i] = err;
-      } finally {
-        count++;
-        if (count === urls.length) {
-          resolve(results);
-        }
-        request();
-      }
-    }
-
-    for (let i = 0; i < concurSize; i++) {
-      request();
-    }
-  });
-}
-
-concurRequest(
-  [
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-    'https://dog.ceo/api/breeds/image/random',
-  ],
-  3
-).then((res) => {
-  console.log(res);
-});
-
 const PageContent = () => {
+  useEffect(() => {
+    function concurRequest(urls: string[], maxNum: number = 3) {
+      if (urls.length === 0) {
+        return Promise.resolve([]);
+      }
+
+      return new Promise((resolve) => {
+        let index = 0; // 当前请求的索引
+        let completeCount = 0; // 当前请求完成的数量
+        const results: any[] = []; // 保存 api 请求的结果
+
+        const _request = async () => {
+          const currentIndex = index;
+          const url = urls[currentIndex];
+          index++;
+          try {
+            const result = await fetch(url);
+            results[currentIndex] = await result.json();
+          } catch (error) {
+            results[currentIndex] = error;
+          } finally {
+            completeCount++;
+            if (completeCount === urls.length) {
+              resolve(results);
+            }
+            if (index < urls.length) {
+              _request();
+            }
+          }
+        };
+
+        for (let i = 0; i < maxNum; i++) {
+          _request();
+        }
+      });
+    }
+
+    const urls = [
+      'https://jsonplaceholder.typicode.com/posts/1',
+      'https://jsonplaceholder.typicode.com/posts/1',
+      'https://jsonplaceholder.typicode.com/posts/1',
+      'https://jsonplaceholder.typicode.com/posts/1',
+      'https://jsonplaceholder.typicode.com/posts/1',
+    ];
+
+    concurRequest(urls, 2).then((res) => {
+      console.log(res);
+    });
+  }, []);
   return (
     <>
       <Container className="container">

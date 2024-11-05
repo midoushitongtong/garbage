@@ -1,5 +1,6 @@
 'use client';
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 
 const Container = styled.section`
   display: flex;
@@ -17,22 +18,22 @@ const Container = styled.section`
   }
 `;
 
-const tag = (strings: TemplateStringsArray, ...values: any[]) => {
-  let finalString = '';
-  strings.forEach((string, i) => {
-    finalString += string + (values[i] || '');
-  });
-  return finalString;
-};
+const str = 'aaabbb';
 
-const name = '张三';
-const age = 10;
+// 实际项目严禁这样用，可读性太差
+const result = [...str].reduce(
+  // 利用括号运算符, 将对象返回
+  (prev: { [_key in string]: number }, item) => (prev[item]++ || (prev[item] = 1), prev),
+  {}
+);
 
-const h1 = tag`name: ${name}, age: ${age}`;
-
-console.log(h1);
+console.log(result);
 
 const PageContent = () => {
+  useEffect(() => {
+    console.log('Hello World');
+  }, []);
+
   return (
     <Container>
       <div className="content">Hello World</div>

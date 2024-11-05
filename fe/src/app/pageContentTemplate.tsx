@@ -11,6 +11,7 @@ const Container = styled.section`
   min-height: 100vh;
   border: 5px solid #06f;
   border-image: linear-gradient(to right, #b6cb13, #f60) 1;
+  background-color: #f6f6f6;
 
   .content {
     font-size: 5rem;
